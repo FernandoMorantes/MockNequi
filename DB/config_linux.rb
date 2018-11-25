@@ -1,0 +1,6 @@
+$host = 'localhost'
+$db_name = 'mocknequi'
+$user_name = 'root'
+$password = ''
+$socket = '/opt/lampp/var/mysql/mysql.sock'
+$port = '3306'

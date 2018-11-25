@@ -1,0 +1,6 @@
+$host = 'localhost'
+$db_name = 'mock_nequi'
+$user_name = 'root'
+$password = ''
+$socket = 'C:/xampp/mysql/mysql.sock'
+$port = '3306'
