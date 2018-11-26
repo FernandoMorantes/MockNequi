@@ -1,1 +1,1 @@
-$SO = 'windows'
+$SO = 'linux'
