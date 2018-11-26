@@ -1,3 +1,4 @@
+# user model class
 class User
   @id
   @first_name
@@ -13,10 +14,6 @@ class User
   def available; end
 
   def balance_total; end
-
-  def deposit; end
-
-  def withdraw; end
 
   def list_transactions(n_transactions); end
 end

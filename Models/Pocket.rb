@@ -1,3 +1,4 @@
+# pocket model class
 class Pocket
   @id
   @balance
@@ -13,5 +14,8 @@ class Pocket
 
   def withdraw; end
 
-  def toString; end
+  def to_string
+    "nombre: #{@name} \n
+    saldo: #{@balance} \n"
+  end
 end

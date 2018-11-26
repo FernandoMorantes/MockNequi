@@ -1,3 +1,4 @@
+# mattress model class
 class Mattress
   @save_money
   def initialize; end
@@ -5,4 +6,8 @@ class Mattress
   def deposit; end
 
   def withdraw; end
+
+  def balance
+    @save_money
+  end
 end

@@ -1,16 +1,17 @@
-require_relative 'config_windows'
+require_relative '../config/config_windows'
 
+# class that controls the connection and queries the database
 class DBOperator
-  @mysql_obj
+
   def initialize
     @mysql_obj = Mysql2::Client.new(
       host: $host,
-   	  username: $user_name,
-    	port: $port,
-    	database: $db_name,
+      username: $user_name,
+      port: $port,
+      database: $db_name,
       socket: $socket,
-      password: $password)
-      puts 'creado'
+      password: $password
+    )
   end
 
   def query(query)
