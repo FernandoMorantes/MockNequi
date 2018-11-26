@@ -1,4 +1,9 @@
-require_relative '../config/config_windows'
+require_relative '../config/config_SO'
+if $SO == 'windows'
+  require_relative '../config/config_database_windows'
+elsif $SO == 'linux'
+  require_relative '../config/config_database_linux'
+end
 
 # class that controls the connection and queries the database
 class DBOperator

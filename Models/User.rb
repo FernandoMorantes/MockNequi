@@ -9,9 +9,12 @@ class User
   @account
   @pockets = []
   @goals = []
-  def initialize; end
+  def initialize(mysql_obj) 
+  end
 
-  def available; end
+  def available
+    @account.balance
+  end
 
   def balance_total; end
 
