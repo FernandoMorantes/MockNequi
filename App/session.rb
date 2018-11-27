@@ -9,8 +9,8 @@ class Session
     password = Digest::SHA2.hexdigest(password)
     result = @mysql_obj.query("INSERT INTO `users` (`first_name`, `last_name`, `email`, `password`) VALUES ('#{first_name}', '#{last_name}', '#{email}', '#{password}')")
     id = return_element(@mysql_obj.query("SELECT `id` FROM `users` WHERE `email` = '#{email}'"), 'id')
-    @mysql_obj.query("INSERT INTO `accounts` (`avaliable`, `user_id`) VALUES ('0', '#{id}')")
-    @mysql_obj.query("INSERT INTO `matresses` (`user_id`, `save_money`) VALUES ('#{id}', '0')")
+    @mysql_obj.query("INSERT INTO `accounts` (`available`, `user_id`) VALUES ('0', '#{id}')")
+    @mysql_obj.query("INSERT INTO `mattresses` (`user_id`, `save_money`) VALUES ('#{id}', '0')")
   end
 
   def login(email, password)
