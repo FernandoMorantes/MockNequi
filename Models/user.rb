@@ -50,7 +50,8 @@ class User
     true
   end
 
-  def add_goal(name, expected_amount, expiration_date)
+  def add_goal(name, expected_amount, year, month, day)
+    expiration_date = DateTime.new(year, month, day).strftime('%Y-%m-%d %H:%M:%S')
     @mysql_obj.query("INSERT INTO `goals` (`name`, `current_amount`, `expected_amount`, `active`, `status`, `user_id`, `expiration_date`) VALUES ('#{name}', '0', '#{expected_amount}', '1', 'in progress', '#{@id}', '#{expiration_date}')")
     @goals = []
     define_goals
