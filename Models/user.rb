@@ -23,12 +23,23 @@ class User
   end
 
   def available
-    @account.balance
+    @account.available
   end
 
-  def balance_total; end
+  def balance_total
+    sum_total = @account.available + @mattress.save_money
+    @pockets.each do |pocket|
+      sum_total += pocket.balance
+    end
+    @goals.each do |goal|
+      sum_total += goal.current_amount
+    end
+    sum_total
+  end
 
-  def list_transactions(n_transactions); end
+  def list_transactions(n_transactions)
+    
+  end
 
   def transfer_money(email, amount)
     @account.transfer_money(email, amount)

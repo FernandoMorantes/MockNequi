@@ -9,6 +9,8 @@ class Goal
   @active
   @mysql_obj
   @user_id
+
+  attr_accessor :current_amount
   def initialize(mysql_obj, id)
     @id = id
     @mysql_obj = mysql_obj

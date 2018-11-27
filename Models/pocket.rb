@@ -5,6 +5,9 @@ class Pocket
   @name
   @mysql_obj
   @user_id
+
+  attr_accessor :balance
+  
   def initialize(mysql_obj, id)
     @mysql_obj = mysql_obj
     @id = id
@@ -70,6 +73,8 @@ class Pocket
     "nombre: #{@name} \n
     saldo: #{@balance} \n"
   end
+
+  private
 
   def return_element(element, name)
     element.each do |i|
