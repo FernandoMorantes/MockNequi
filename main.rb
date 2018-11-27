@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'mysql2'
+require 'digest'
 require_relative 'DB/DBOperator'
 require_relative 'Models/account'
 require_relative 'Models/goal'

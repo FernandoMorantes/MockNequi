@@ -7,10 +7,12 @@ class User
   @password
   @mattress
   @account
-  @pockets = []
-  @goals = []
   @mysql_obj
+
+  attr_accessor :id, :password, :mattress, :pockets, :goals, :first_name, :last_name, :email, :account
   def initialize(mysql_obj, id)
+    @pockets = []
+    @goals = []
     @id = id
     @mysql_obj = mysql_obj
     define_attributes

@@ -14,7 +14,7 @@ class Goal
     @mysql_obj = mysql_obj
     result = @mysql_obj.query("SELECT * FROM `goals` WHERE `id` = #{@id}")
     result.each do |goal|
-      @active = goal['active'] != 0
+      @active = goal['active']
       @name = goal['name']
       @expiration_date = goal['expiration_date']
       @current_amount = goal['current_amount']
@@ -33,7 +33,7 @@ class Goal
     monto total: #{@expected_amount} \n
     dinero ahorrado: #{@current_amount} \n
     dinero restante: #{remaining_money} \n
-    estado: #{@expired == true ? 'vencida' : 'cumplida'} \n
+    estado: #{@status} \n
     facha limite: #{@expiration_date} \n"
   end
 
