@@ -24,9 +24,32 @@ class Goal
     end
   end
 
-  def withdraw; end
+  def withdraw(amount)
+    account_id = return_element(@mysql_obj.query("SELECT id FROM accounts WHERE user_id = '#{@user_id}'"), 'id')
+    @mysql_obj.query('BEGIN')
+    @mysql_obj.query("UPDATE `goals` SET `current_amount` = #{@current_amount - amount} WHERE id = #{@id}")
+    @mysql_obj.query("UPDATE `accounts` SET `available` = available + '#{amount}'  WHERE id = '#{account_id}'")
+    @mysql_obj.query("INSERT INTO `internal_transactions` (`type`, `user_id`, `amount`) VALUES ('withdraw',#{@user_id},#{amount})")
+    if @current_amount - amount >= 0
+      @current_amount -= amount
+      @mysql_obj.query('COMMIT')
+      return true
+    else
+      @mysql_obj.query('ROLLBACK')
+      return false
+    end
+  end
 
-  def deposit; end
+  def deposit(amount)
+    account_id = return_element(@mysql_obj.query("SELECT id FROM accounts WHERE user_id = '#{@user_id}'"), 'id')
+    @mysql_obj.query('BEGIN')
+    @mysql_obj.query("UPDATE `accounts` SET `available` = available - '#{amount}' WHERE id = '#{account_id}'")
+    @mysql_obj.query("UPDATE `goals` SET `current_amount` = '#{@current_amount + amount}' WHERE `goals`.`id` = '#{@id}'")
+    @mysql_obj.query("INSERT INTO `internal_transactions` (`type`, `user_id`, `amount`) VALUES ('deposit',#{@user_id},#{amount})")
+    @current_amount += amount
+    @mysql_obj.query('COMMIT')
+    true
+  end
 
   def to_string
     "nombre: #{@name},\n
@@ -37,9 +60,19 @@ class Goal
     facha limite: #{@expiration_date} \n"
   end
 
-  def delete; end
+  def delete
+    withdraw(@current_amount)
+    @mysql_obj.query("UPDATE `goals` SET `active` = '0' WHERE `goals`.`id` = '#{@id}'")
+    true
+  end
 
   private
+
+  def return_element(element, name)
+    element.each do |i|
+      return i[name]
+    end
+  end
 
   def remaining_money
     @expected_amount - @current_amount
