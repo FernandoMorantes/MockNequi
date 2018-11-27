@@ -1,0 +1,14 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    mysql2 (0.5.2)
+
+PLATFORMS
+  ruby
+  x64-mingw32
+
+DEPENDENCIES
+  mysql2 (~> 0.5.2)
+
+BUNDLED WITH
+   1.17.1
