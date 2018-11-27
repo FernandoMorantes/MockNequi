@@ -30,6 +30,10 @@ class User
 
   def list_transactions(n_transactions); end
 
+  def transfer_money(email, amount)
+    @account.transfer_money(email, amount)
+  end
+
   private
 
   def define_attributes
