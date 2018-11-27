@@ -17,9 +17,27 @@ class Pocket
     end
   end
 
-  def delete; end
+  def delete
+    withdraw(@balance)
+    @mysql_obj.query("UPDATE `pockets` SET `active` = '0' WHERE `pockets`.`id` = '#{@id}'")
+    true
+  end
 
-  def transfer_money(email); end
+  def transfer_money(email, amount)
+    id_destination = return_element(@mysql_obj.query("SELECT `id` FROM `users` WHERE `email` = '#{email}'"), 'id')
+    @mysql_obj.query('BEGIN')
+    @mysql_obj.query("UPDATE pockets SET balance = balance - '#{amount}' WHERE id = '#{@id}'")
+    @mysql_obj.query("UPDATE accounts SET available = available + '#{amount}' WHERE user_id = '#{id_destination}'")
+    @mysql_obj.query("INSERT INTO `transfers` (`user_id_origin`, `user_id_destination`, `amount`) VALUES ('#{@user_id}', '#{id_destination}', '#{amount}')")
+    if (@balance - amount) < 0
+      @mysql_obj.query('ROLLBACK')
+      return false
+    else
+      @balance -= amount
+      @mysql_obj.query('COMMIT')
+      return true
+    end
+  end
 
   def deposit(amount)
     account_id = return_element(@mysql_obj.query("SELECT id FROM accounts WHERE user_id = '#{@user_id}'"), 'id')

@@ -23,7 +23,8 @@ class Account
     @mysql_obj.query('BEGIN')
     @mysql_obj.query("UPDATE accounts SET available = available - '#{amount}' WHERE user_id = '#{@user_id}'")
     @mysql_obj.query("UPDATE accounts SET available = available + '#{amount}' WHERE user_id = '#{id_destination}'")
-    if (@balance - amount) <= 0
+    @mysql_obj.query("INSERT INTO `transfers` (`user_id_origin`, `user_id_destination`, `amount`) VALUES ('#{@user_id}', '#{id_destination}', '#{amount}')")
+    if (@balance - amount) < 0
       @mysql_obj.query('ROLLBACK')
       return false
     else
