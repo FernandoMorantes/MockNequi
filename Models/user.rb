@@ -37,12 +37,24 @@ class User
     sum_total
   end
 
-  def list_transactions(n_transactions)
-    
-  end
+  def list_transactions(n_transactions); end
 
   def transfer_money(email, amount)
     @account.transfer_money(email, amount)
+  end
+
+  def add_pocket(name)
+    @mysql_obj.query("INSERT INTO `pockets` (`name`, `balance`, `active`, `user_id`) VALUES ('#{name}', '0', '1', '#{@id}')")
+    @pockets = []
+    define_pockets
+    true
+  end
+
+  def add_goal(name, expected_amount, expiration_date)
+    @mysql_obj.query("INSERT INTO `goals` (`name`, `current_amount`, `expected_amount`, `active`, `status`, `user_id`, `expiration_date`) VALUES ('#{name}', '0', '#{expected_amount}', '1', 'in progress', '#{@id}', '#{expiration_date}')")
+    @goals = []
+    define_goals
+    true
   end
 
   private
