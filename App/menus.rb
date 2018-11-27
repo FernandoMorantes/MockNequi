@@ -4,7 +4,7 @@ class Menus
 
   def main__menu
     "1. registrarse \n
-    2. ingresar"
+    2. ingresar \n "
   end
 
   def mattress_menu
