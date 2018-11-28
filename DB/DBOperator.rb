@@ -20,6 +20,9 @@ class DBOperator
   end
 
   def query(query)
-    @mysql_obj.query(query)
+    @mysql_obj.query(query, cast_booleans: true)
+  end
+  def close
+    @mysql_obj.close
   end
 end
