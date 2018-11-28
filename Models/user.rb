@@ -37,7 +37,16 @@ class User
     sum_total
   end
 
-  def list_transactions(n_transactions); end
+  def list_transactions(n_transactions)
+    count = 0
+    transactions = @mysql_obj.query("(SELECT ext.type,ext.amount,ext.transaction_date FROM `external_trasactions` AS ext INNER JOIN users ON ext.user_id = users.id WHERE users.id = '#{@id}' ORDER BY ext.transaction_date DESC) UNION (SELECT CONCAT(IF(user_id_origin = '#{@id}','send','reception')) as type, tx.amount,tx.transaction_date FROM `transfers` AS tx INNER JOIN users ON tx.user_id_destination = users.id OR tx.user_id_origin = users.id WHERE users.id = '#{@id}' ORDER BY tx.transaction_date DESC) ORDER BY `transaction_date` DESC")
+    transactions.each do |row|
+      puts row
+      count += 1
+      break if count >= n_transactions
+    end
+    gets
+  end
 
   def transfer_money(email, amount)
     @account.transfer_money(email, amount)
