@@ -1,5 +1,9 @@
 # class that controls the sessions of the application
 class Session
+
+  @current_logged_user
+  attr_accessor :current_logged_user
+
   def initialize(mysql_obj)
     @session_active = false
     @mysql_obj = mysql_obj
@@ -17,10 +21,12 @@ class Session
     password = Digest::SHA2.hexdigest(password)
     id = return_element(@mysql_obj.query("SELECT `id` FROM `users` WHERE `email` = '#{email}'"), 'id')
     password_database = return_element(@mysql_obj.query("SELECT `password` FROM `users` WHERE `id` = '#{id}'"), 'password')
+
     if password_database != password
       return false
     else
-      return User.new(@mysql_obj, id)
+      @current_logged_user = User.new(@mysql_obj, id)
+      return true
     end
   end
 

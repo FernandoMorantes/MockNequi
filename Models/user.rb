@@ -26,7 +26,7 @@ class User
     @account.available
   end
 
-  def balance_total
+  def total_balance
     sum_total = @account.available + @mattress.save_money
     @pockets.each do |pocket|
       sum_total += pocket.balance
@@ -39,13 +39,20 @@ class User
 
   def list_transactions(n_transactions)
     count = 0
-    transactions = @mysql_obj.query("(SELECT ext.type,ext.amount,ext.transaction_date FROM `external_trasactions` AS ext INNER JOIN users ON ext.user_id = users.id WHERE users.id = '#{@id}' ORDER BY ext.transaction_date DESC) UNION (SELECT CONCAT(IF(user_id_origin = '#{@id}','send','reception')) as type, tx.amount,tx.transaction_date FROM `transfers` AS tx INNER JOIN users ON tx.user_id_destination = users.id OR tx.user_id_origin = users.id WHERE users.id = '#{@id}' ORDER BY tx.transaction_date DESC) ORDER BY `transaction_date` DESC")
+    transactions = @mysql_obj.query("(SELECT ext.type,ext.amount,ext.transaction_date 
+                                    FROM `external_trasactions` AS ext
+                                    INNER JOIN users ON ext.user_id = users.id WHERE users.id = '#{@id}' 
+                                    ORDER BY ext.transaction_date DESC) 
+                                    UNION (SELECT CONCAT(IF(user_id_origin = '#{@id}','send','reception')) as type, tx.amount,tx.transaction_date 
+                                    FROM `transfers` AS tx INNER JOIN users ON tx.user_id_destination = users.id OR tx.user_id_origin = users.id 
+                                    WHERE users.id = '#{@id}' 
+                                    ORDER BY tx.transaction_date DESC) 
+                                    ORDER BY `transaction_date` DESC")
     transactions.each do |row|
       puts row
       count += 1
       break if count >= n_transactions
     end
-    gets
   end
 
   def transfer_money(email, amount)
@@ -59,6 +66,14 @@ class User
     true
   end
 
+  def search_pocket(name)
+    @pockets.each do |pocket|
+      return pocket if pocket.name == name && pocket.active == true
+    end
+
+    return nil
+  end
+
   def add_goal(name, expected_amount, year, month, day)
     expiration_date = DateTime.new(year, month, day).strftime('%Y-%m-%d %H:%M:%S')
     @mysql_obj.query("INSERT INTO `goals` (`name`, `current_amount`, `expected_amount`, `active`, `status`, `user_id`, `expiration_date`) VALUES ('#{name}', '0', '#{expected_amount}', '1', 'in progress', '#{@id}', '#{expiration_date}')")
@@ -66,6 +81,15 @@ class User
     define_goals
     true
   end
+
+  def search_goal(name)
+    @goals.each do |goal|
+      return goal if goal.name == name && goal.active == true
+    end
+
+    return nil
+  end
+  
 
   private
 

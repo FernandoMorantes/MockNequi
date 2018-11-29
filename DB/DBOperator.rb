@@ -9,20 +9,21 @@ end
 class DBOperator
 
   def initialize
-    @mysql_obj = Mysql2::Client.new(
-      host: $host,
+    @mysql_obj = Mysql2::Client.new(   
       username: $user_name,
+      password: $password,
+      host: $host,
       port: $port,
       database: $db_name,
-      socket: $socket,
-      password: $password
+      socket: $socket
     )
   end
 
   def query(query)
     @mysql_obj.query(query, cast_booleans: true)
   end
-  def close
+
+  def close_connection
     @mysql_obj.close
   end
 end
