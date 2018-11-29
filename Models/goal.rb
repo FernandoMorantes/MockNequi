@@ -10,7 +10,7 @@ class Goal
   @mysql_obj
   @user_id
 
-  attr_accessor :current_amount
+  attr_accessor :name, :current_amount, :status, :active, :expected_amount
   def initialize(mysql_obj, id)
     @id = id
     @mysql_obj = mysql_obj
@@ -26,7 +26,7 @@ class Goal
     end
   end
 
-  def withdraw(amount)
+  def withdraw(amount, account)
     account_id = return_element(@mysql_obj.query("SELECT id FROM accounts WHERE user_id = '#{@user_id}'"), 'id')
     @mysql_obj.query('BEGIN')
     @mysql_obj.query("UPDATE `goals` SET `current_amount` = #{@current_amount - amount} WHERE id = #{@id}")
@@ -34,6 +34,7 @@ class Goal
     @mysql_obj.query("INSERT INTO `internal_transactions` (`type`, `user_id`, `amount`) VALUES ('withdraw',#{@user_id},#{amount})")
     if @current_amount - amount >= 0
       @current_amount -= amount
+      account.available += amount
       @mysql_obj.query('COMMIT')
       return true
     else
@@ -42,30 +43,38 @@ class Goal
     end
   end
 
-  def deposit(amount)
+  def deposit(amount, account)
     account_id = return_element(@mysql_obj.query("SELECT id FROM accounts WHERE user_id = '#{@user_id}'"), 'id')
     @mysql_obj.query('BEGIN')
     @mysql_obj.query("UPDATE `accounts` SET `available` = available - '#{amount}' WHERE id = '#{account_id}'")
     @mysql_obj.query("UPDATE `goals` SET `current_amount` = '#{@current_amount + amount}' WHERE `goals`.`id` = '#{@id}'")
     @mysql_obj.query("INSERT INTO `internal_transactions` (`type`, `user_id`, `amount`) VALUES ('deposit',#{@user_id},#{amount})")
-    @current_amount += amount
-    @mysql_obj.query('COMMIT')
-    true
+
+    if account.available - amount >= 0
+      @current_amount += amount
+      account.available -= amount
+      @mysql_obj.query('COMMIT')
+      true
+    else
+      @mysql_obj.query('ROLLBACK')
+      return false
+    end
   end
 
   def to_string
-    "nombre: #{@name},\n
-    monto total: #{@expected_amount} \n
-    dinero ahorrado: #{@current_amount} \n
-    dinero restante: #{remaining_money} \n
-    estado: #{@status} \n
-    facha limite: #{@expiration_date} \n"
+    "
+    nombre: #{@name}
+    monto total: #{@expected_amount}
+    dinero ahorrado: #{@current_amount}
+    dinero restante: #{remaining_money}
+    estado: #{@status}
+    facha limite: #{@expiration_date} \n\n"
   end
 
-  def delete
-    withdraw(@current_amount)
+  def delete(account)
+    withdraw(@current_amount, account)
     @mysql_obj.query("UPDATE `goals` SET `active` = '0' WHERE `goals`.`id` = '#{@id}'")
-    true
+    @active = '0'
   end
 
   private
