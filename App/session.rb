@@ -1,6 +1,5 @@
 # class that controls the sessions of the application
 class Session
-
   @current_logged_user
   attr_accessor :current_logged_user
 

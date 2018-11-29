@@ -20,8 +20,8 @@ class Account
 
   def transfer_money(email, amount)
     id_destination = return_element(@mysql_obj.query("SELECT `id` FROM `users` WHERE `email` = '#{email}'"), 'id')
-    
-    if !id_destination.kind_of?(Array)
+
+    if !id_destination.is_a?(Array)
       @mysql_obj.query('BEGIN')
       @mysql_obj.query("UPDATE accounts SET available = available - '#{amount}' WHERE user_id = '#{@user_id}'")
       @mysql_obj.query("UPDATE accounts SET available = available + '#{amount}' WHERE user_id = '#{id_destination}'")

@@ -1,6 +1,5 @@
 # class that contains the definition of all the menus of the application
 class MenusUI
-
   def initialize; end
 
   def show_main_menu
@@ -10,7 +9,7 @@ class MenusUI
     3. cerrar el programa \n\nIngrese la opcion que desea seleccionar: "
   end
 
-    def show_user_menu
+  def show_user_menu
     print "\nMenu de usuario \n
     1. consultar saldo disponible en la cuenta
     2. consultar saldo total de la cuenta
@@ -47,9 +46,8 @@ class MenusUI
     print "\nMenu de metas \n
     1. listar metas
     2. crear una nueva meta
-    3. cerrar una meta 
+    3. cerrar una meta
     4. agregar dinero a una meta
     5. regresar al menu de usuario \n\nIngrese la opcion que desea seleccionar: "
   end
-  
 end

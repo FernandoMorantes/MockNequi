@@ -49,7 +49,7 @@ class Goal
     @mysql_obj.query("UPDATE `accounts` SET `available` = available - '#{amount}' WHERE id = '#{account_id}'")
     @mysql_obj.query("UPDATE `goals` SET `current_amount` = '#{@current_amount + amount}' WHERE `goals`.`id` = '#{@id}'")
     @mysql_obj.query("INSERT INTO `internal_transactions` (`type`, `user_id`, `amount`) VALUES ('deposit',#{@user_id},#{amount})")
-    
+
     if account.available - amount >= 0
       @current_amount += amount
       account.available -= amount

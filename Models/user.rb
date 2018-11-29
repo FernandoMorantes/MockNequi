@@ -39,14 +39,14 @@ class User
 
   def list_transactions(n_transactions)
     count = 0
-    transactions = @mysql_obj.query("(SELECT ext.type,ext.amount,ext.transaction_date 
+    transactions = @mysql_obj.query("(SELECT ext.type,ext.amount,ext.transaction_date
                                     FROM `external_trasactions` AS ext
-                                    INNER JOIN users ON ext.user_id = users.id WHERE users.id = '#{@id}' 
-                                    ORDER BY ext.transaction_date DESC) 
-                                    UNION (SELECT CONCAT(IF(user_id_origin = '#{@id}','send','reception')) as type, tx.amount,tx.transaction_date 
-                                    FROM `transfers` AS tx INNER JOIN users ON tx.user_id_destination = users.id OR tx.user_id_origin = users.id 
-                                    WHERE users.id = '#{@id}' 
-                                    ORDER BY tx.transaction_date DESC) 
+                                    INNER JOIN users ON ext.user_id = users.id WHERE users.id = '#{@id}'
+                                    ORDER BY ext.transaction_date DESC)
+                                    UNION (SELECT CONCAT(IF(user_id_origin = '#{@id}','send','reception')) as type, tx.amount,tx.transaction_date
+                                    FROM `transfers` AS tx INNER JOIN users ON tx.user_id_destination = users.id OR tx.user_id_origin = users.id
+                                    WHERE users.id = '#{@id}'
+                                    ORDER BY tx.transaction_date DESC)
                                     ORDER BY `transaction_date` DESC")
     transactions.each do |row|
       puts row
@@ -70,8 +70,7 @@ class User
     @pockets.each do |pocket|
       return pocket if pocket.name == name && pocket.active == true
     end
-
-    return nil
+    nil
   end
 
   def add_goal(name, expected_amount, year, month, day)
@@ -87,9 +86,8 @@ class User
       return goal if goal.name == name && goal.active == true
     end
 
-    return nil
+    nil
   end
-  
 
   private
 

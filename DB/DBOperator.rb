@@ -7,9 +7,8 @@ end
 
 # class that controls the connection and queries the database
 class DBOperator
-
   def initialize
-    @mysql_obj = Mysql2::Client.new(   
+    @mysql_obj = Mysql2::Client.new(
       username: $user_name,
       password: $password,
       host: $host,
