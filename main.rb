@@ -2,6 +2,7 @@ require 'rubygems'
 require 'bundler/setup'
 require 'mysql2'
 require 'digest'
+require 'io/console'
 require_relative 'DB/DBOperator'
 require_relative 'Models/account'
 require_relative 'Models/goal'
@@ -15,6 +16,12 @@ require_relative 'App/session'
 require_relative 'App/user_input'
 require_relative 'App/user_menu'
 require_relative 'App/transaction'
-
+require_relative 'App/modules/deposit'
+require_relative 'App/modules/withdraw'
+require_relative 'App/modules/create_delete'
+# password = STDIN.noecho(&:gets).chomp
+# puts password
+# password = STDIN.getpass('Password:')
+# puts password
 mock_nequi = MockNequi.new
 mock_nequi.run

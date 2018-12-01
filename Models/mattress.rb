@@ -16,13 +16,13 @@ class Mattress
     end
   end
 
-  def deposit(amount)
+  def deposit(amount, available)
     account_id = return_element(@mysql_obj.query("SELECT id FROM accounts WHERE user_id = '#{@user_id}'"), 'id')
     @mysql_obj.query('BEGIN')
     @mysql_obj.query("UPDATE `accounts` SET `available` = available - '#{amount}' WHERE id = '#{account_id}'")
     @mysql_obj.query("UPDATE `mattresses` SET `save_money` = '#{@save_money + amount}' WHERE `mattresses`.`id` = '#{@id}'")
     @mysql_obj.query("INSERT INTO `internal_transactions` (`type`, `user_id`, `amount`) VALUES ('deposit',#{@user_id},#{amount})")
-    if account.available - amount >= 0
+    if available - amount >= 0
       @save_money += amount
       @mysql_obj.query('COMMIT')
       true
@@ -38,7 +38,7 @@ class Mattress
     @mysql_obj.query("UPDATE `mattresses` SET `save_money` = #{@save_money - amount} WHERE id = #{@id}")
     @mysql_obj.query("UPDATE `accounts` SET `available` = available + '#{amount}'  WHERE id = '#{account_id}'")
     @mysql_obj.query("INSERT INTO `internal_transactions` (`type`, `user_id`, `amount`) VALUES ('withdraw',#{@user_id},#{amount})")
-    
+
     if @save_money - amount >= 0
       @save_money -= amount
       @mysql_obj.query('COMMIT')

@@ -20,10 +20,12 @@ class Pocket
     end
   end
 
-  def delete(account)
-    withdraw(@balance, account)
+  def delete
+    balance = @balance
+    withdraw(@balance)
     @mysql_obj.query("UPDATE `pockets` SET `active` = '0' WHERE `pockets`.`id` = '#{@id}'")
     @active = '0'
+    balance
   end
 
   def transfer_money(email, amount)
@@ -45,14 +47,14 @@ class Pocket
     end
   end
 
-  def deposit(amount)
+  def deposit(amount, available)
     account_id = return_element(@mysql_obj.query("SELECT id FROM accounts WHERE user_id = '#{@user_id}'"), 'id')
     @mysql_obj.query('BEGIN')
     @mysql_obj.query("UPDATE `accounts` SET `available` = available - '#{amount}'  WHERE id = '#{account_id}'")
     @mysql_obj.query("UPDATE `pockets` SET `balance` = '#{@balance + amount}' WHERE `pockets`.`id` = '#{@id}'")
     @mysql_obj.query("INSERT INTO `internal_transactions` (`type`, `user_id`, `amount`) VALUES ('deposit',#{@user_id},#{amount})")
 
-    if account.available - amount >= 0
+    if available - amount >= 0
       @balance += amount
       @mysql_obj.query('COMMIT')
       true
@@ -62,7 +64,7 @@ class Pocket
     end
   end
 
-  def withdraw(amount, _account)
+  def withdraw(amount)
     account_id = return_element(@mysql_obj.query("SELECT id FROM accounts WHERE user_id = '#{@user_id}'"), 'id')
     @mysql_obj.query('BEGIN')
     @mysql_obj.query("UPDATE `pockets` SET `balance` = #{@balance - amount} WHERE id = #{@id}")
