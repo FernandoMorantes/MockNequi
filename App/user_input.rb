@@ -47,17 +47,39 @@ class UserInput
     end
   end
 
-  def validate_date_input(type:)
+  def validate_date_input(type:, month: 0)
     read_console_input
     return false unless /\A\d+\z/.match(@last_input)
     return false if !@last_input.to_i.between?(2018, 3000) && type == 'year'
     return false if !@last_input.to_i.between?(1, 12) && type == 'month'
-    return false if !@last_input.to_i.between?(1, 31) && type == 'day'
+    return validate_day(month) if !@last_input.to_i.between?(1, 31) && type == 'day'
 
     true
   end
 
   private
+
+  def validate_day(month)
+    if !(month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+      if month == 4 || month == 6 || month == 9 || month == 11
+        if @user_input.last_input.to_i <= 30
+          true
+        else
+          puts 'El dia ingresado no es valido'
+          false
+        end
+      else
+        if @user_input.last_input.to_i <= 28
+          true
+        else
+          puts 'El dia ingresado no es valido'
+          false
+        end
+      end
+    else
+      true
+    end
+  end
 
   def read_console_input
     @last_input = gets.chomp

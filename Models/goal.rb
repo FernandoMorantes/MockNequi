@@ -43,7 +43,7 @@ class Goal
     end
   end
 
-  def deposit(amount, account)
+  def deposit(amount)
     account_id = return_element(@mysql_obj.query("SELECT id FROM accounts WHERE user_id = '#{@user_id}'"), 'id')
     @mysql_obj.query('BEGIN')
     @mysql_obj.query("UPDATE `accounts` SET `available` = available - '#{amount}' WHERE id = '#{account_id}'")
@@ -52,7 +52,6 @@ class Goal
 
     if account.available - amount >= 0
       @current_amount += amount
-      account.available -= amount
       @mysql_obj.query('COMMIT')
       true
     else

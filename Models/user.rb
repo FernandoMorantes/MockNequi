@@ -81,11 +81,37 @@ class User
     true
   end
 
+  def list_pockets
+    list = "\nLista de bolsillos:"
+    pockets.each do |pocket|
+      list += pocket.to_string if pocket.active == true
+    end
+    list
+  end
+
+  def list_goals
+    list = "\nLista de metas activas:"
+    goals.each do |goal|
+      list += goal.to_string if goal.active == true
+    end
+    list += "\nLista de metas cumplidas:"
+    goals.each do |goal|
+      if goal.active == false && goal.status == 'fulfilled'
+        list += goal.to_string
+      end
+    end
+    list += "\nLista de metas cerradas (sin completar):"
+    goals.each do |goal|
+      if goal.active == false && goal.status != 'fulfilled'
+        list += goal.to_string
+      end
+    end
+  end
+
   def search_goal(name)
     @goals.each do |goal|
       return goal if goal.name == name && goal.active == true
     end
-
     nil
   end
 
