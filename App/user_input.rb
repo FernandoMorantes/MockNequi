@@ -53,7 +53,6 @@ class UserInput
     return false if !@last_input.to_i.between?(2018, 3000) && type == 'year'
     return false if !@last_input.to_i.between?(1, 12) && type == 'month'
     return validate_day(month) if !@last_input.to_i.between?(1, 31) && type == 'day'
-
     true
   end
 

@@ -10,6 +10,7 @@ class MenuOption
     return mattress_menu_option(option_number.to_i) if menu_type == 'mattress'
     return pocket_menu_option(option_number.to_i) if menu_type == 'pocket'
     return goal_menu_option(option_number.to_i) if menu_type == 'goal'
+    true
   end
 
   private
