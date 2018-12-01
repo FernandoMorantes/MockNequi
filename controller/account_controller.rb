@@ -22,7 +22,7 @@ class AccountController
 
   def transfer
     data = @form.form_transfer
-    if @user.account.transfer_money(data[email:], data[amount:].to_i)
+    if @user.account.transfer_money(data[:email], data[:amount])
       puts "\nEnvio realizado con exito!"
     else
       puts "\nLa cantidad a enviar no esta disponible en su cuenta\no el correo especificado no tiene una cuenta registrada"

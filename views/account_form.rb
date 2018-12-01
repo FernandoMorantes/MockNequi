@@ -24,7 +24,7 @@ class AccountForm
     begin
       print 'ingrese la cantidad de dinero que desea enviar: '
     end while !@user_input.validate_amount_input
-    amount = @user_input.last_input
+    amount = @user_input.last_input.to_i
     { email: email, amount: amount }
   end
 end
