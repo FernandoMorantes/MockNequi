@@ -10,8 +10,6 @@ class UserMenu
     begin
       begin
         @menusUI.show_user_menu
-        @user_input.read_console_input
-        puts "\nLa opcion ingresada esta mal escrita o no es valida" unless @user_input.validate_menu_input(menu_type: 'user')
       end while !@user_input.validate_menu_input(menu_type: 'user')
 
       if @user_input.menu_input.option == 'consultar saldo disponible en la cuenta'
