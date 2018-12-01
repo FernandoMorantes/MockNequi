@@ -14,6 +14,7 @@ require_relative 'App/mock_nequi'
 require_relative 'App/session'
 require_relative 'App/user_input'
 require_relative 'App/user_menu'
+require_relative 'App/transaction'
 
 mock_nequi = MockNequi.new
 mock_nequi.run

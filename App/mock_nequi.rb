@@ -3,7 +3,7 @@ class MockNequi
   def initialize
     @mysql_obj = DBOperator.new
     @session = Session.new(@mysql_obj)
-    @menusUI = MenusUI.new
+    @menus_ui = MenusUI.new
     @user_input = UserInput.new
   end
 
@@ -11,14 +11,14 @@ class MockNequi
     puts "\nBienvenido a Mock Nequi \n"
     loop do
       begin
-        @menusUI.show_main_menu
+        @menus_ui.show_main_menu
       end until @user_input.validate_menu_input(menu_type: 'main')
-      case @user_input.last_input
+      case @user_input.last_input.to_i
       when 1
         registration_process
       when 2
         if login_process
-          user_menu = UserMenu.new(user: @session.current_logged_user, session: @session, user_input: @user_input, menusUI: @menusUI)
+          user_menu = UserMenu.new(user: @session.current_logged_user, session: @session)
           user_menu.show
         end
       when 3

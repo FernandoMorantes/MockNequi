@@ -1,135 +1,32 @@
 class UserMenu
-  def initialize(user:, session:, user_input:, menusUI:)
+  def initialize(user:, session:)
     @user = user
     @session = session
-    @user_input = user_input
-    @menusUI = menusUI
+    @user_input = UserInput.new
+    @menus_ui = MenusUI.new
+    @menu_option = MenuOption.new(user: @user, user_menu: self)
   end
 
   def show
     begin
       begin
-        @menusUI.show_user_menu
-      end while !@user_input.validate_menu_input(menu_type: 'user')
-
-      if @user_input.menu_input.option == 'consultar saldo disponible en la cuenta'
-        puts "\nDinero disponible en la cuenta: #{@user.account.available}"
-
-      elsif @user_input.menu_input.option == 'consultar saldo total de la cuenta'
-        puts "\nDinero Total en la cuenta: #{@user.total_balance}"
-
-      elsif @user_input.menu_input.option == 'ingresar dinero a la cuenta'
-        begin
-          print 'ingrese la cantidad de dinero que desea depositar: '
-          @user_input.read_console_input
-          @user_input.validate_amount_input ? amount = @user_input.last_input : puts('El valor ingresado no es valido')
-        end while !@user_input.validate_amount_input
-
-        @user.account.deposit(amount.to_i)
-        puts "\nDinero depositado con exito!"
-
-      elsif @user_input.menu_input.option == 'retirar'
-        begin
-          print 'ingrese la cantidad de dinero que desea retirar: '
-          @user_input.read_console_input
-          @user_input.validate_amount_input ? amount = @user_input.last_input : puts('El valor ingresado no es valido')
-        end while !@user_input.validate_amount_input
-
-        if @user.account.withdraw(amount.to_i)
-          puts "\nRetiro realizado con exito!"
-        else
-          puts "\nLa cantidad a retirar no esta disponible en su cuenta"
-        end
-
-      elsif @user_input.menu_input.option == 'enviar dinero'
-        begin
-          print 'Direccion de correo a la cual desea enviar el dinero: '
-          @user_input.read_console_input
-          @user_input.validate_user_data_input(field: 'email') ? email = @user_input.last_input : puts('El correo ingresado no es valido')
-        end while !@user_input.validate_user_data_input(field: 'email')
-
-        begin
-          print 'ingrese la cantidad de dinero que desea enviar: '
-          @user_input.read_console_input
-          @user_input.validate_amount_input ? amount = @user_input.last_input : puts('El valor ingresado no es valido')
-        end while !@user_input.validate_amount_input
-
-        if @user.account.transfer_money(email, amount.to_i)
-          puts "\nEnvio realizado con exito!"
-        else
-          puts "\nLa cantidad a enviar no esta disponible en su cuenta\no el correo especificado no tiene una cuenta registrada"
-        end
-
-      elsif @user_input.menu_input.option == 'consultar transacciones'
-        begin
-          print 'ingrese la cantidad de transacciones que desea consultar: '
-          @user_input.read_console_input
-          @user_input.validate_amount_input ? n_transactions = @user_input.last_input : puts('El valor ingresado no es valido')
-        end while !@user_input.validate_amount_input
-
-        puts "\nUltimas #{n_transactions} transacciones:"
-        @user.list_transactions(n_transactions.to_i)
-
-      elsif @user_input.menu_input.option == 'consultar colchon'
-        mattress_menu
-
-      elsif @user_input.menu_input.option == 'consultar bolsillos'
-        pocket_menu
-
-      elsif @user_input.menu_input.option == 'consultar metas'
-        goal_menu
-
-      elsif @user_input.menu_input.option == 'cerrar sesión'
-        @session.current_logged_user = 'none'
-      end
-    end while @user_input.menu_input.option != 'cerrar sesión'
+        @menus_ui.show_user_menu
+      end until @user_input.validate_menu_input(menu_type: 'user')
+    end while !@menu_option.do(menu_type: 'user', option_number: @user_input.last_input)
   end
 
   def mattress_menu
     begin
       begin
-        @menusUI.show_mattress_menu
-        @user_input.read_console_input
-        puts "\nLa opcion ingresada esta mal escrita o no es valida" unless @user_input.validate_menu_input(menu_type: 'mattress')
+        @menus_ui.show_mattress_menu
       end while !@user_input.validate_menu_input(menu_type: 'mattress')
-
-      if @user_input.menu_input.option == 'consultar dinero guardado'
-        puts "\nDinero ahorrado en el colchon: #{@user.mattress.save_money}"
-
-      elsif @user_input.menu_input.option == 'agregar dinero'
-        begin
-          print 'ingrese la cantidad de dinero que desea guardar en el colchon: '
-          @user_input.read_console_input
-          @user_input.validate_amount_input ? amount = @user_input.last_input : puts('El valor ingresado no es valido')
-        end while !@user_input.validate_amount_input
-
-        if @user.mattress.deposit(amount.to_i, @user.account)
-          puts "\nDinero depositado con exito!"
-        else
-          puts "\nLa cantidad a depositar no esta disponible en su cuenta"
-        end
-
-      elsif @user_input.menu_input.option == 'retirar dinero'
-        begin
-          print 'ingrese la cantidad de dinero que desea retirar del colchon: '
-          @user_input.read_console_input
-          @user_input.validate_amount_input ? amount = @user_input.last_input : puts('El valor ingresado no es valido')
-        end while !@user_input.validate_amount_input
-
-        if @user.mattress.withdraw(amount.to_i, @user.account)
-          puts "\nRetiro realizado con exito!"
-        else
-          puts "\nLa cantidad a retirar no esta disponible en el colchon"
-        end
-
-      end
-    end while @user_input.menu_input.option != 'regresar al menu de usuario'
+    end while !@menu_option.do(menu_type: 'mattress', option_number: @user_input.last_input)
   end
 
   def pocket_menu
     begin
       begin
-        @menusUI.show_pocket_menu
+        @menus_ui.show_pocket_menu
         @user_input.read_console_input
         puts "\nLa opcion ingresada esta mal escrita o no es valida" unless @user_input.validate_menu_input(menu_type: 'pocket')
       end while !@user_input.validate_menu_input(menu_type: 'pocket')
@@ -249,7 +146,7 @@ class UserMenu
   def goal_menu
     begin
       begin
-        @menusUI.show_goal_menu
+        @menus_ui.show_goal_menu
         @user_input.read_console_input
         puts "\nLa opcion ingresada esta mal escrita o no es valida" unless @user_input.validate_menu_input(menu_type: 'goal')
       end while !@user_input.validate_menu_input(menu_type: 'goal')
