@@ -1,5 +1,5 @@
 # runner class
-class MockNequi
+class MockNequi < ConsolePrint
   def initialize
     @mysql_obj = DBOperator.new
     @session = Session.new(@mysql_obj)
@@ -8,21 +8,24 @@ class MockNequi
   end
 
   def run
-    puts "\nBienvenido a Mock Nequi \n"
+    print_cyan_bold "\nBienvenido a Mock Nequi \n"
     loop do
-      begin
+      loop do
         @menus_ui.show_main_menu
-      end until @user_input.validate_menu_input(menu_type: 'main')
+        break if @user_input.validate_menu_input(menu_type: 'main')
+      end
       case @user_input.last_input.to_i
       when 1
+        clear_console
         @session.registration_process
       when 2
+        clear_console
         if @session.login_process
           user_menu = UserMenu.new(user: @session.current_logged_user, session: @session)
           user_menu.show
         end
       when 3
-        puts 'Hasta luego'
+        mock_loading 'saliendo'
         @mysql_obj.close_connection
         exit
       end

@@ -1,4 +1,4 @@
-class MattressForm
+class MattressForm < ConsolePrint
   def initialize
     @user_input = UserInput.new
   end

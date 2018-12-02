@@ -1,4 +1,4 @@
-class PocketController
+class PocketController < ConsolePrint
   def initialize(user:)
     @user_input = UserInput.new
     @user = user
@@ -6,7 +6,9 @@ class PocketController
   end
 
   def list
-    puts @user.list_pockets
+    print_blue @user.list_pockets
+    wait_for_enter
+    clear_console
   end
 
   def deposit
@@ -14,14 +16,16 @@ class PocketController
     loop do
       data = @form.form_deposit
       break unless @user.search_pocket(data[:name]).nil?
-      puts "\nEl bolsillo #{data[:name]} no existe"
+      print_red_bold "\nEl bolsillo #{data[:name]} no existe"
     end
     if @user.search_pocket(data[:name]).deposit(data[:amount], @user.account.available)
       @user.account.available -= data[:amount]
-      puts "\nDinero depositado en el bolisllo #{data[:name]} con exito!"
+      print_green_bold "\nDinero depositado en el bolisllo #{data[:name]} con exito!"
     else
-      puts "\nLa cantidad a depositar no esta disponible en su cuenta"
+      print_red_bold "\nLa cantidad a depositar no esta disponible en su cuenta"
     end
+    wait_for_enter
+    clear_console
   end
 
   def withdraw
@@ -29,14 +33,16 @@ class PocketController
     loop do
       data = @form.form_deposit
       break unless @user.search_pocket(data[:name]).nil?
-      puts "\nEl bolsillo #{data[:name]} no existe"
+      print_red_bold "\nEl bolsillo #{data[:name]} no existe"
     end
     if @user.search_pocket(data[:name]).withdraw(data[:amount])
       @user.account.available += data[:amount]
-      puts "\nDinero retirado del bolsillo #{data[:name]} con exito!"
+      print_green_bold "\nDinero retirado del bolsillo #{data[:name]} con exito!"
     else
-      puts "\nLa cantidad a retirar no esta disponible en el bolsillo #{name}"
+      print_red_bold "\nLa cantidad a retirar no esta disponible en el bolsillo #{name}"
     end
+    wait_for_enter
+    clear_console
   end
 
   def transfer
@@ -44,23 +50,27 @@ class PocketController
     loop do
       data = @form.form_transfer
       if data[:email] == @user.email
-        puts 'No te puedes enviar dinero a ti mismo'
+        print_brown 'No te puedes enviar dinero a ti mismo'
       else
         break unless @user.search_pocket(data[:name]).nil?
-        puts "\nEl bolsillo #{data[:name]} no existe"
+        print_red_bold "\nEl bolsillo #{data[:name]} no existe"
       end
     end
     if @user.search_pocket(data[:name]).transfer_money(data[:email], data[:amount])
-      puts "\nEnvio realizado con exito!"
+      print_green_bold "\nEnvio realizado con exito!"
     else
-      puts "\nLa cantidad a enviar no esta disponible el bolsillo\no el correo especificado no tiene una cuenta registrada"
+      print_red_bold "\nLa cantidad a enviar no esta disponible el bolsillo\no el correo especificado no tiene una cuenta registrada"
     end
+    wait_for_enter
+    clear_console
   end
 
   def create
     name = @form.form_create
     @user.add_pocket(name)
-    puts "\nEl bolsillo #{name} ha sido creado con exito!"
+    print_green_bold "\nEl bolsillo #{name} ha sido creado con exito!"
+    wait_for_enter
+    clear_console
   end
 
   def delete
@@ -68,9 +78,11 @@ class PocketController
     if !@user.search_pocket(name).nil?
       pocket_balance = @user.search_pocket(name).delete
       @user.account.available += pocket_balance
-      puts "\nEl bolsillo #{name} ha sido eliminado, el saldo ahora esta disponible en la cuenta"
+      print_green_bold "\nEl bolsillo #{name} ha sido eliminado, el saldo ahora esta disponible en la cuenta"
     else
-      puts "\nEl bolsillo #{name} no existe"
+      print_red_bold "\nEl bolsillo #{name} no existe"
     end
+    wait_for_enter
+    clear_console
   end
 end

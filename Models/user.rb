@@ -22,10 +22,6 @@ class User
     define_goals
   end
 
-  def available
-    @account.available
-  end
-
   def total_balance
     sum_total = @account.available + @mattress.save_money
     @pockets.each do |pocket|
@@ -44,7 +40,7 @@ class User
                                     FROM `external_trasactions` AS ext
                                     INNER JOIN users ON ext.user_id = users.id WHERE users.id = '#{@id}'
                                     ORDER BY ext.transaction_date DESC)
-                                    UNION (SELECT CONCAT(IF(user_id_origin = '#{@id}','send','reception')) as type, tx.amount,tx.transaction_date
+                                    UNION (SELECT CONCAT(IF(user_id_origin = '#{@id}','sending','reception')) as type, tx.amount,tx.transaction_date
                                     FROM `transfers` AS tx INNER JOIN users ON tx.user_id_destination = users.id OR tx.user_id_origin = users.id
                                     WHERE users.id = '#{@id}'
                                     ORDER BY tx.transaction_date DESC)
@@ -54,10 +50,6 @@ class User
       count += 1
       break if count >= n_transactions
     end
-  end
-
-  def transfer_money(email, amount)
-    @account.transfer_money(email, amount)
   end
 
   def add_pocket(name)
@@ -76,6 +68,7 @@ class User
 
   def add_goal(name, expected_amount, year, month, day)
     expiration_date = DateTime.new(year, month, day).strftime('%Y-%m-%d %H:%M:%S')
+    return false unless search_goal(name).nil?
     @mysql_obj.query("INSERT INTO `goals` (`name`, `current_amount`, `expected_amount`, `active`, `status`, `user_id`, `expiration_date`) VALUES ('#{name}', '0', '#{expected_amount}', '1', 'in progress', '#{@id}', '#{expiration_date}')")
     @goals = []
     define_goals
@@ -83,6 +76,7 @@ class User
   end
 
   def list_pockets
+    define_pockets
     list = "\nLista de bolsillos:"
     pockets.each do |pocket|
       list += pocket.to_string if pocket.active == true
@@ -91,19 +85,14 @@ class User
   end
 
   def list_goals
+    define_goals
     list = "\nLista de metas activas:"
     goals.each do |goal|
-      list += goal.to_string if goal.active == true
+      list += goal.to_string if goal.active == true && goal.status != 'fulfilled'
     end
     list += "\nLista de metas cumplidas:"
     goals.each do |goal|
-      if goal.active == false && goal.status == 'fulfilled'
-        list += goal.to_string
-      end
-    end
-    list += "\nLista de metas cerradas (sin completar):"
-    goals.each do |goal|
-      if goal.active == false && goal.status != 'fulfilled'
+      if goal.status == 'fulfilled'
         list += goal.to_string
       end
     end
@@ -112,7 +101,7 @@ class User
 
   def search_goal(name)
     @goals.each do |goal|
-      return goal if goal.name == name && goal.active == true
+      return goal if goal.name == name && goal.active
     end
     nil
   end
@@ -130,14 +119,16 @@ class User
   end
 
   def define_pockets
-    pockets = @mysql_obj.query("SELECT * FROM `pockets` WHERE `user_id` = #{@id}")
+    @pockets =[]
+    pockets = @mysql_obj.query("SELECT * FROM `pockets` WHERE `user_id` = #{@id} AND `active` = '1'")
     pockets.each do |pocket|
       @pockets.push(Pocket.new(@mysql_obj, pocket['id']))
     end
   end
 
   def define_goals
-    goals = @mysql_obj.query("SELECT * FROM `goals` WHERE `user_id` = #{@id}")
+    @goals =[]
+    goals = @mysql_obj.query("SELECT * FROM `goals` WHERE `user_id` = #{@id} AND `active` = '1'")
     goals.each do |goal|
       @goals.push(Goal.new(@mysql_obj, goal['id']))
     end

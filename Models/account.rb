@@ -18,9 +18,12 @@ class Account
     end
   end
 
+  def update_available_money
+    @available = return_element(@mysql_obj.query("SELECT `available` FROM `accounts` WHERE `id` = '#{@id}'"), 'available')
+  end
+
   def transfer_money(email, amount)
     id_destination = return_element(@mysql_obj.query("SELECT `id` FROM `users` WHERE `email` = '#{email}'"), 'id')
-
     if !id_destination.is_a?(Array)
       @mysql_obj.query('BEGIN')
       @mysql_obj.query("UPDATE accounts SET available = available - '#{amount}' WHERE user_id = '#{@user_id}'")

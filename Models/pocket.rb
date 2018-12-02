@@ -82,9 +82,9 @@ class Pocket
   end
 
   def to_string
-    "
+    " \n
     nombre: #{@name}
-    saldo: #{@balance} \n"
+    saldo: #{format_money(@balance)} \n"
   end
 
   private
@@ -93,5 +93,19 @@ class Pocket
     element.each do |i|
       return i[name]
     end
+  end
+
+  def format_money(money)
+    money_format = ''
+    count = 0
+    money.to_s.split('').reverse.each do |number|
+      if count == 3
+        money_format += '.'
+        count = 0
+      end
+      money_format += number.to_s
+      count += 1
+    end
+    "$ #{money_format.reverse}"
   end
 end

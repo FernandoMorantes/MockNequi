@@ -1,28 +1,32 @@
-class PocketForm
+class PocketForm < ConsolePrint
   def initialize
     @user_input = UserInput.new
   end
 
   def form_deposit
-    begin
+    loop do
       print 'Nombre del bolsillo: '
-    end while !@user_input.validate_user_data_input(field: 'name')
+      break if @user_input.validate_user_data_input(field: 'name')
+    end
     name = @user_input.last_input
-    begin
+    loop do
       print 'ingrese la cantidad de dinero que desea guardar en el bolsillo: '
-    end while !@user_input.validate_amount_input
+      break if @user_input.validate_amount_input
+    end
     amount = @user_input.last_input.to_i
     { name: name, amount: amount }
    end
 
   def form_withdraw
-    begin
+    loop do
       print 'Nombre del bolsillo: '
-    end while !@user_input.validate_user_data_input(field: 'name')
+      break if @user_input.validate_user_data_input(field: 'name')
+    end
     name = @user_input.last_input
-    begin
+    loop do
       print 'ingrese la cantidad de dinero que desea retirar del bolsillo: '
-    end while !@user_input.validate_amount_input
+      break if @user_input.validate_amount_input
+    end
     amount = @user_input.last_input.to_i
     { name: name, amount: amount }
   end
