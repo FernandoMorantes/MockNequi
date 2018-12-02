@@ -6,7 +6,49 @@ class Session
   def initialize(mysql_obj)
     @session_active = false
     @mysql_obj = mysql_obj
+    @user_input = UserInput.new
   end
+
+  def registration_process
+    begin
+      print "\nnombre: "
+    end until @user_input.validate_user_data_input(field: 'name')
+    name = @user_input.last_input
+    begin
+      print "\napellido: "
+    end until @user_input.validate_user_data_input(field: 'last name')
+    last_name = @user_input.last_input
+    begin
+      print "\nemail: "
+    end until @user_input.validate_user_data_input(field: 'email')
+    email = @user_input.last_input
+    begin
+      print "\ncontraseña: "
+    end until @user_input.validate_user_data_input(field: 'password')
+    password = @user_input.last_input
+    register_user(name, last_name, email, password)
+    puts 'El registro ha sido exitoso!'
+  end
+
+  def login_process
+    begin
+      print "\nemail: "
+    end until @user_input.validate_user_data_input(field: 'email')
+    email = @user_input.last_input
+    begin
+      print "\ncontraseña: "
+    end until @user_input.validate_user_data_input(field: 'password')
+    password = @user_input.last_input
+    if login(email, password)
+      puts("\nBienvenido #{@current_logged_user.first_name}")
+      return true
+    else
+      puts("\nEmail o contraseña incorrectos. Intentalo nuevamente")
+      return false
+    end
+  end
+
+  private
 
   def register_user(first_name, last_name, email, password)
     password = Digest::SHA2.hexdigest(password)
@@ -28,8 +70,6 @@ class Session
       return true
     end
   end
-
-  private
 
   def return_element(element, name)
     element.each do |i|

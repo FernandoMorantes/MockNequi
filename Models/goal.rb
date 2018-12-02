@@ -43,16 +43,15 @@ class Goal
     end
   end
 
-  def deposit(amount, account)
+  def deposit(amount, available)
     account_id = return_element(@mysql_obj.query("SELECT id FROM accounts WHERE user_id = '#{@user_id}'"), 'id')
     @mysql_obj.query('BEGIN')
     @mysql_obj.query("UPDATE `accounts` SET `available` = available - '#{amount}' WHERE id = '#{account_id}'")
     @mysql_obj.query("UPDATE `goals` SET `current_amount` = '#{@current_amount + amount}' WHERE `goals`.`id` = '#{@id}'")
     @mysql_obj.query("INSERT INTO `internal_transactions` (`type`, `user_id`, `amount`) VALUES ('deposit',#{@user_id},#{amount})")
 
-    if account.available - amount >= 0
+    if available - amount >= 0
       @current_amount += amount
-      account.available -= amount
       @mysql_obj.query('COMMIT')
       true
     else
@@ -67,7 +66,7 @@ class Goal
     monto total: #{@expected_amount}
     dinero ahorrado: #{@current_amount}
     dinero restante: #{remaining_money}
-    estado: #{@status}
+    estado: #{@status == 'in progress' ? 'en progreso' : @status == 'fulfilled' ? 'compleatda' : 'expirada'}
     facha limite: #{@expiration_date} \n\n"
   end
 

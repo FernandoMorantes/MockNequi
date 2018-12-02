@@ -7,7 +7,7 @@ class Pocket
   @user_id
 
   attr_accessor :name, :balance, :active
-  
+
   def initialize(mysql_obj, id)
     @mysql_obj = mysql_obj
     @id = id
@@ -20,22 +20,23 @@ class Pocket
     end
   end
 
-  def delete(account)
-    withdraw(@balance, account)
+  def delete
+    balance = @balance
+    withdraw(@balance)
     @mysql_obj.query("UPDATE `pockets` SET `active` = '0' WHERE `pockets`.`id` = '#{@id}'")
     @active = '0'
+    balance
   end
 
   def transfer_money(email, amount)
     id_destination = return_element(@mysql_obj.query("SELECT `id` FROM `users` WHERE `email` = '#{email}'"), 'id')
-    
-    if !id_destination.kind_of?(Array)
+
+    unless id_destination.is_a?(Array)
       @mysql_obj.query('BEGIN')
       @mysql_obj.query("UPDATE pockets SET balance = balance - '#{amount}' WHERE id = '#{@id}'")
       @mysql_obj.query("UPDATE accounts SET available = available + '#{amount}' WHERE user_id = '#{id_destination}'")
       @mysql_obj.query("INSERT INTO `transfers` (`user_id_origin`, `user_id_destination`, `amount`) VALUES ('#{@user_id}', '#{id_destination}', '#{amount}')")
     end
-    
     if (@balance - amount) < 0
       @mysql_obj.query('ROLLBACK')
       return false
@@ -46,16 +47,15 @@ class Pocket
     end
   end
 
-  def deposit(amount, account)
+  def deposit(amount, available)
     account_id = return_element(@mysql_obj.query("SELECT id FROM accounts WHERE user_id = '#{@user_id}'"), 'id')
     @mysql_obj.query('BEGIN')
     @mysql_obj.query("UPDATE `accounts` SET `available` = available - '#{amount}'  WHERE id = '#{account_id}'")
     @mysql_obj.query("UPDATE `pockets` SET `balance` = '#{@balance + amount}' WHERE `pockets`.`id` = '#{@id}'")
     @mysql_obj.query("INSERT INTO `internal_transactions` (`type`, `user_id`, `amount`) VALUES ('deposit',#{@user_id},#{amount})")
-    
-    if account.available - amount >= 0
+
+    if available - amount >= 0
       @balance += amount
-      account.available -= amount
       @mysql_obj.query('COMMIT')
       true
     else
@@ -64,16 +64,15 @@ class Pocket
     end
   end
 
-  def withdraw(amount, account)
+  def withdraw(amount)
     account_id = return_element(@mysql_obj.query("SELECT id FROM accounts WHERE user_id = '#{@user_id}'"), 'id')
     @mysql_obj.query('BEGIN')
     @mysql_obj.query("UPDATE `pockets` SET `balance` = #{@balance - amount} WHERE id = #{@id}")
     @mysql_obj.query("UPDATE `accounts` SET `available` = available + '#{amount}'  WHERE id = '#{account_id}'")
     @mysql_obj.query("INSERT INTO `internal_transactions` (`type`, `user_id`, `amount`) VALUES ('withdraw',#{@user_id},#{amount})")
-    
+
     if @balance - amount >= 0
       @balance -= amount
-      account.available += amount
       @mysql_obj.query('COMMIT')
       return true
     else
