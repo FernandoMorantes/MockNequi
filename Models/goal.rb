@@ -23,10 +23,11 @@ class Goal
       @expected_amount = goal['expected_amount']
       @status = goal['status']
       @user_id = goal['user_id']
+      update_status
     end
   end
 
-  def withdraw(amount, account)
+  def withdraw(amount)
     account_id = return_element(@mysql_obj.query("SELECT id FROM accounts WHERE user_id = '#{@user_id}'"), 'id')
     @mysql_obj.query('BEGIN')
     @mysql_obj.query("UPDATE `goals` SET `current_amount` = #{@current_amount - amount} WHERE id = #{@id}")
@@ -34,7 +35,6 @@ class Goal
     @mysql_obj.query("INSERT INTO `internal_transactions` (`type`, `user_id`, `amount`) VALUES ('withdraw',#{@user_id},#{amount})")
     if @current_amount - amount >= 0
       @current_amount -= amount
-      account.available += amount
       @mysql_obj.query('COMMIT')
       return true
     else
@@ -50,7 +50,7 @@ class Goal
     @mysql_obj.query("UPDATE `goals` SET `current_amount` = '#{@current_amount + amount}' WHERE `goals`.`id` = '#{@id}'")
     @mysql_obj.query("INSERT INTO `internal_transactions` (`type`, `user_id`, `amount`) VALUES ('deposit',#{@user_id},#{amount})")
 
-    if available - amount >= 0
+    if available - amount >= 0 && @status == 'in progress'
       @current_amount += amount
       @mysql_obj.query('COMMIT')
       true
@@ -61,22 +61,36 @@ class Goal
   end
 
   def to_string
+    update_status
     "
     nombre: #{@name}
-    monto total: #{@expected_amount}
-    dinero ahorrado: #{@current_amount}
-    dinero restante: #{remaining_money}
-    estado: #{@status == 'in progress' ? 'en progreso' : @status == 'fulfilled' ? 'compleatda' : @active == true ? 'expirada' : 'cerrada'}
-    facha limite: #{@expiration_date} \n\n"
+    monto total: $#{@expected_amount}
+    dinero ahorrado: $#{@current_amount}
+    dinero restante: $#{remaining_money}
+    estado: #{@status == 'in progress' && @active ? 'en progreso' : @status == 'fulfilled' ? 'completada' : @active ? 'expirada' : 'cerrada'}
+    facha limite: #{@expiration_date.strftime('%a %d %b %Y')} \n\n"
   end
 
-  def delete(account)
-    withdraw(@current_amount, account)
+  def delete
+    amount = @current_amount
+    withdraw(@current_amount)
     @mysql_obj.query("UPDATE `goals` SET `active` = '0' WHERE `goals`.`id` = '#{@id}'")
     @active = '0'
+    amount
   end
 
   private
+
+  def update_status
+    date = Date.parse(@expiration_date.to_s)
+    @status = if date.ajd < Date.today.ajd
+                remaining_money <= 0 ? 'fulfilled' : 'expired'
+              else
+                remaining_money <= 0 ? 'fulfilled' : 'in progress'
+              end
+    @mysql_obj.query("UPDATE `goals` SET `status` = '#{@status}' 
+                      WHERE `goals`.`id` = '#{@id}'")
+  end
 
   def return_element(element, name)
     element.each do |i|
