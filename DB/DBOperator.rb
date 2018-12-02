@@ -1,7 +1,6 @@
-require_relative '../config/config_SO'
-if $SO == 'windows'
+if Gem::Platform.local.os == 'windows'
   require_relative '../config/config_database_windows'
-elsif $SO == 'linux'
+elsif Gem::Platform.local.os == 'linux'
   require_relative '../config/config_database_linux'
 end
 
@@ -9,12 +8,12 @@ end
 class DBOperator
   def initialize
     @mysql_obj = Mysql2::Client.new(
-      username: $user_name,
-      password: $password,
-      host: $host,
-      port: $port,
-      database: $db_name,
-      socket: $socket
+      username: ENV['user_name'],
+      password: ENV['password'],
+      host: ENV['host'],
+      port: ENV['port'],
+      database: ENV['db_name'],
+      socket: ENV['socket']
     )
   end
 
