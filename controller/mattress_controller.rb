@@ -7,7 +7,7 @@ class MattressController < ConsolePrint
 
   def available
     print_blue "\nDinero ahorrado en el colchon: "
-    print_green_bold "$#{@user.mattress.save_money}"
+    print_money @user.mattress.save_money.to_s
     wait_for_enter
     clear_console
   end

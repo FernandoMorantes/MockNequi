@@ -6,15 +6,17 @@ class AccountController < ConsolePrint
   end
 
   def available
+    @user.account.update_available_money
     print_blue "\nDinero disponible en la cuenta: "
-    print_green_bold "$#{@user.account.available}"
+    print_money @user.account.available.to_s
     wait_for_enter
     clear_console
   end
 
   def balance_total
+    @user.account.update_available_money
     print_blue "\nDinero Total en la cuenta: "
-    print_green_bold "$#{@user.total_balance}"
+    print_money @user.total_balance.to_s
     wait_for_enter
     clear_console
   end

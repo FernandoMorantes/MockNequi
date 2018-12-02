@@ -14,6 +14,24 @@ class ConsolePrint
     sleep(0.3)
   end
 
+  def print_money(money)
+    print_green_bold "$ #{format_money(money)}"
+  end
+
+  def format_money(money)
+    money_format = ''
+    count = 0
+    money.to_s.split('').reverse.each do |number|
+      if count == 3
+        money_format += '.'
+        count = 0
+      end
+      money_format += number.to_s
+      count += 1
+    end
+    money_format.reverse
+  end
+
   def wait_for_enter
     print_blue "\n\n \t\t\t\t\t Presiona enter para continuar... \n"
     STDIN.noecho(&:gets).chomp

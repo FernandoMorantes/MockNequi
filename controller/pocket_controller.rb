@@ -16,7 +16,7 @@ class PocketController < ConsolePrint
     loop do
       data = @form.form_deposit
       break unless @user.search_pocket(data[:name]).nil?
-      prin "\nEl bolsillo #{data[:name]} no existe"
+      print_red_bold "\nEl bolsillo #{data[:name]} no existe"
     end
     if @user.search_pocket(data[:name]).deposit(data[:amount], @user.account.available)
       @user.account.available -= data[:amount]
