@@ -20,8 +20,8 @@ class MenuOption
   private
 
   def user_menu_option(option_number)
-    puts "\nDinero disponible en la cuenta: #{@user.account.available}" if option_number == 1
-    puts "\nDinero Total en la cuenta: #{@user.total_balance}" if option_number == 2
+    @account_controller.available if option_number == 1
+    @account_controller.balance_total if option_number == 2
     @account_controller.deposit if option_number == 3
     @account_controller.withdraw if option_number == 4
     @account_controller.transfer if option_number == 5

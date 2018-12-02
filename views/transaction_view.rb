@@ -5,13 +5,13 @@ class TransactionView < ConsolePrint
 
   def form_list
     loop do
-      print 'ingrese la cantidad de transacciones que desea consultar: '
+      print_blue 'ingrese la cantidad de transacciones que desea consultar: '
       break if @user_input.validate_amount_input
     end
     @user_input.last_input
   end
 
   def print_transactions(trasactions)
-    
+    # some code
   end
 end

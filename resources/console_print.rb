@@ -3,8 +3,19 @@ class ConsolePrint
     system('cls') || system('clear')
   end
 
+  def mock_loading(string)
+    print_cyan string
+    sleep(0.7)
+    print_cyan '.'
+    sleep(0.7)
+    print_cyan '.'
+    sleep(0.7)
+    print_cyan ".\n \n"
+    sleep(0.3)
+  end
+
   def wait_for_enter
-    print_green "\n\n Presiona enter para continuar... \n"
+    print_blue "\n\n \t\t\t\t\t Presiona enter para continuar... \n"
     STDIN.noecho(&:gets).chomp
   end
 

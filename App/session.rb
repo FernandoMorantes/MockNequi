@@ -32,7 +32,7 @@ class Session < ConsolePrint
     end
     password = @user_input.last_input
     register_user(name, last_name, email, password)
-    print_green_bold 'El registro ha sido exitoso!'
+    print_green_bold "\nEl registro ha sido exitoso!"
     wait_for_enter
     clear_console
   end

@@ -79,15 +79,15 @@ class UserInput < ConsolePrint
   # returns error messages according to the specified field
   # @param field_type: field which throw the error
   def wrong(field_type:)
-    print_red_bold 'Error: la opcion ingresada no es valida' if field_type == 'menu'
-    print_red_bold 'Error: el dato ingresado no es valido. Minimo 2 caracteres, maximo 60' if field_type == 'user data'
-    print_red_bold 'Error: la contraseña ingresada no es valida. Minimo 5 caracteres, maximo 60' if field_type == 'password'
-    print_red_bold 'Error: el email ingresado no es valido' if field_type == 'email'
-    print_red_bold 'Error: La cantidad ingresada no es valida' if field_type == 'amount'
-    print_red_bold 'Error: la fecha ingresada no es valida' if field_type == 'date'
-    print_red_bold 'Error: el año ingresado no es valido' if field_type == 'year'
-    print_red_bold 'Error: el mes ingresado no es valido' if field_type == 'month'
-    print_red_bold 'Error: el dia ingresado no es valido' if field_type == 'day'
+    print_red_bold "\nError: la opcion ingresada no es valida\n" if field_type == 'menu'
+    print_red_bold "\nError: el dato ingresado no es valido. Minimo 2 caracteres, maximo 60 \n" if field_type == 'user data'
+    print_red_bold "\nError: la contraseña ingresada no es valida. Minimo 5 caracteres, maximo 60\n" if field_type == 'password'
+    print_red_bold "\nError: el email ingresado no es valido\n" if field_type == 'email'
+    print_red_bold "\nError: La cantidad ingresada no es valida\n" if field_type == 'amount'
+    print_red_bold "\nError: la fecha ingresada no es valida\n" if field_type == 'date'
+    print_red_bold "\nError: el año ingresado no es valido\n" if field_type == 'year'
+    print_red_bold "\nError: el mes ingresado no es valido\n" if field_type == 'month'
+    print_red_bold "\nError: el dia ingresado no es valido\n" if field_type == 'day'
     false
   end
 end
