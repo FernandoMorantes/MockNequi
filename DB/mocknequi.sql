@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 26-11-2018 a las 05:52:45
+-- Tiempo de generación: 27-11-2018 a las 18:59:14
 -- Versión del servidor: 10.1.37-MariaDB
 -- Versión de PHP: 7.2.12
 
@@ -32,7 +32,7 @@ USE `mocknequi`;
 
 CREATE TABLE `accounts` (
   `id` int(11) NOT NULL,
-  `avaliable` int(11) NOT NULL,
+  `available` int(11) NOT NULL,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -62,7 +62,7 @@ CREATE TABLE `goals` (
   `current_amount` int(11) NOT NULL,
   `expected_amount` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL,
-  `status` enum('fulfilled','expired') NOT NULL,
+  `status` enum('fulfilled','expired','in progress') NOT NULL,
   `user_id` int(11) NOT NULL,
   `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `expiration_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
@@ -85,13 +85,13 @@ CREATE TABLE `internal_transactions` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `matresses`
+-- Estructura de tabla para la tabla `mattresses`
 --
 
-CREATE TABLE `matresses` (
+CREATE TABLE `mattresses` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `balance` int(11) NOT NULL
+  `save_money` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -134,7 +134,7 @@ CREATE TABLE `users` (
   `first_name` varchar(60) NOT NULL,
   `last_name` varchar(60) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `password` varchar(64) NOT NULL,
+  `password` varchar(257) NOT NULL,
   `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -147,6 +147,7 @@ CREATE TABLE `users` (
 --
 ALTER TABLE `accounts`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_id` (`user_id`),
   ADD KEY `FK_user_account` (`user_id`);
 
 --
@@ -171,9 +172,9 @@ ALTER TABLE `internal_transactions`
   ADD KEY `FK_internal_transaction` (`user_id`);
 
 --
--- Indices de la tabla `matresses`
+-- Indices de la tabla `mattresses`
 --
-ALTER TABLE `matresses`
+ALTER TABLE `mattresses`
   ADD PRIMARY KEY (`id`),
   ADD KEY `FK_user_mattress` (`user_id`);
 
@@ -204,9 +205,45 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `accounts`
+--
+ALTER TABLE `accounts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `external_trasactions`
 --
 ALTER TABLE `external_trasactions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `goals`
+--
+ALTER TABLE `goals`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `internal_transactions`
+--
+ALTER TABLE `internal_transactions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `mattresses`
+--
+ALTER TABLE `mattresses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `pockets`
+--
+ALTER TABLE `pockets`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `transfers`
+--
+ALTER TABLE `transfers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -223,37 +260,37 @@ ALTER TABLE `users`
 -- Filtros para la tabla `accounts`
 --
 ALTER TABLE `accounts`
-  ADD CONSTRAINT `FK_user_account` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `FK_user_account` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `external_trasactions`
 --
 ALTER TABLE `external_trasactions`
-  ADD CONSTRAINT `FK_user_external_transaction` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `FK_user_external_transaction` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `goals`
 --
 ALTER TABLE `goals`
-  ADD CONSTRAINT `FK_goal_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `FK_goal_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `internal_transactions`
 --
 ALTER TABLE `internal_transactions`
-  ADD CONSTRAINT `FK_internal_transaction` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `FK_internal_transaction` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `matresses`
+-- Filtros para la tabla `mattresses`
 --
-ALTER TABLE `matresses`
-  ADD CONSTRAINT `FK_user_mattress` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `mattresses`
+  ADD CONSTRAINT `FK_user_mattress` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `pockets`
 --
 ALTER TABLE `pockets`
-  ADD CONSTRAINT `FK_pocket_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `FK_pocket_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `transfers`
