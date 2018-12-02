@@ -1,11 +1,11 @@
 # class that validates all the options entered by the user
-class UserInput
+class UserInput < ConsolePrintColor
   @last_input
 
   attr_reader :last_input, :menu_input
 
-  def initialize; end
-
+  # validates the option entered in the corresponding menu
+  # @param menu_type: menu where the user is located
   def validate_menu_input(menu_type:)
     read_console_input
     return wrong(field_type: 'menu') unless /\A\d+\z/.match(@last_input)
@@ -17,6 +17,9 @@ class UserInput
     true
   end
 
+  # validates the data that the user enters
+  # depending on the field that is being filled
+  # @param field: field that is being validated
   def validate_user_data_input(field:)
     field != 'password' ? read_console_input : read_console_password
     return wrong(field_type: 'user data') if !@last_input.size.between?(2, 60) && field == 'name'
@@ -26,12 +29,17 @@ class UserInput
     true
   end
 
+  # validates a number entered, either money or a menu option
   def validate_amount_input
     read_console_input
     return wrong(field_type: 'amount') unless /\A\d+\z/.match(@last_input)
     true
   end
 
+  # validates a date entered
+  # depends on the type of date you want to validate
+  # @param type: date type to validate
+  # @param month: by default 0, it is used to validate a date of type day
   def validate_date_input(type:, month: 0)
     read_console_input
     return wrong(field_type: 'date') unless /\A\d+\z/.match(@last_input)
@@ -43,6 +51,9 @@ class UserInput
 
   private
 
+  # validates the day entered by the user
+  # return will depend on the month you have chosen
+  # @param month: month chosen by the user
   def validate_day(month)
     if ![1, 3, 5, 7, 8, 10, 12].include? month
       if [4, 6, 9, 11].include? month
@@ -55,24 +66,28 @@ class UserInput
     end
   end
 
+  # reads passwords entered by console by the user
   def read_console_password
     @last_input = STDIN.noecho(&:gets).chomp
   end
 
+  # reads user input by console
   def read_console_input
     @last_input = gets.chomp
   end
 
+  # returns error messages according to the specified field
+  # @param field_type: field which throw the error
   def wrong(field_type:)
-    puts 'la opcion ingresada no es valida' if field_type == 'menu'
-    puts 'el dato ingresado no es valido. Minimo 2 caracteres, maximo 60' if field_type == 'user data'
-    puts 'la contraseña ingresada no es valida. Minimo 5 caracteres, maximo 60' if field_type == 'password'
-    puts 'el email ingresado no es valido' if field_type == 'email'
-    puts 'La cantidad ingresada no es valida' if field_type == 'amount'
-    puts 'la fecha ingresada no es valida' if field_type == 'date'
-    puts 'el año ingresado no es valido' if field_type == 'year'
-    puts 'el mes ingresado no es valido' if field_type == 'month'
-    puts 'el dia ingresado no es valido' if field_type == 'day'
+    print_red_bold 'Error: la opcion ingresada no es valida' if field_type == 'menu'
+    print_red_bold 'Error: el dato ingresado no es valido. Minimo 2 caracteres, maximo 60' if field_type == 'user data'
+    print_red_bold 'Error: la contraseña ingresada no es valida. Minimo 5 caracteres, maximo 60' if field_type == 'password'
+    print_red_bold 'Error: el email ingresado no es valido' if field_type == 'email'
+    print_red_bold 'Error: La cantidad ingresada no es valida' if field_type == 'amount'
+    print_red_bold 'Error: la fecha ingresada no es valida' if field_type == 'date'
+    print_red_bold 'Error: el año ingresado no es valido' if field_type == 'year'
+    print_red_bold 'Error: el mes ingresado no es valido' if field_type == 'month'
+    print_red_bold 'Error: el dia ingresado no es valido' if field_type == 'day'
     false
   end
 end

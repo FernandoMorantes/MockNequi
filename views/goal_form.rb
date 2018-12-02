@@ -1,4 +1,4 @@
-class GoalForm
+class GoalForm < ConsolePrint
   def initialize
     @user_input = UserInput.new
   end

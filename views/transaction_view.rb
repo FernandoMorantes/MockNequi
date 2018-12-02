@@ -1,4 +1,4 @@
-class TransactionView
+class TransactionView < ConsolePrint
   def initialize
     @user_input = UserInput.new
   end
