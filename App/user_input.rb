@@ -18,7 +18,7 @@ class UserInput
   end
 
   def validate_user_data_input(field:)
-    read_console_input
+    field != 'password' ? read_console_input : read_console_password
     return wrong(field_type: 'user data') if !@last_input.size.between?(2, 60) && field == 'name'
     return wrong(field_type: 'user data') if !@last_input.size.between?(2, 60) && field == 'last name'
     return wrong(field_type: 'email') if (!@last_input.size.between?(6, 60) || !@last_input.include?('@') || !@last_input.include?('.com')) && field == 'email'
@@ -53,6 +53,10 @@ class UserInput
     else
       true
     end
+  end
+
+  def read_console_password
+    @last_input = STDIN.noecho(&:gets).chomp
   end
 
   def read_console_input

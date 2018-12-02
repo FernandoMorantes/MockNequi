@@ -38,6 +38,7 @@ class User
   end
 
   def list_transactions(n_transactions)
+    list = []
     count = 0
     transactions = @mysql_obj.query("(SELECT ext.type,ext.amount,ext.transaction_date
                                     FROM `external_trasactions` AS ext
@@ -49,7 +50,7 @@ class User
                                     ORDER BY tx.transaction_date DESC)
                                     ORDER BY `transaction_date` DESC")
     transactions.each do |row|
-      puts row
+      list.push(row)
       count += 1
       break if count >= n_transactions
     end

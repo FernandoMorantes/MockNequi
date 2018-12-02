@@ -15,13 +15,16 @@ require_relative 'App/mock_nequi'
 require_relative 'App/session'
 require_relative 'App/user_input'
 require_relative 'App/user_menu'
-require_relative 'App/transaction'
-require_relative 'App/modules/deposit'
-require_relative 'App/modules/withdraw'
-require_relative 'App/modules/create_delete'
-# password = STDIN.noecho(&:gets).chomp
-# puts password
-# password = STDIN.getpass('Password:')
-# puts password
+require_relative 'controller/account_controller'
+require_relative 'controller/goal_controller'
+require_relative 'controller/mattress_controller'
+require_relative 'controller/pocket_controller'
+require_relative 'controller/transaction_controller'
+require_relative 'views/account_form'
+require_relative 'views/goal_form'
+require_relative 'views/mattress_form'
+require_relative 'views/pocket_form'
+require_relative 'views/transaction_view'
+
 mock_nequi = MockNequi.new
 mock_nequi.run
