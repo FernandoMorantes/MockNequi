@@ -66,7 +66,7 @@ class Goal
     monto total: #{@expected_amount}
     dinero ahorrado: #{@current_amount}
     dinero restante: #{remaining_money}
-    estado: #{@status}
+    estado: #{@status == 'in progress' ? 'en progreso' : @status == 'fulfilled' ? 'compleatda' : 'expirada'}
     facha limite: #{@expiration_date} \n\n"
   end
 

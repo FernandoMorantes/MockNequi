@@ -107,6 +107,7 @@ class User
         list += goal.to_string
       end
     end
+    list
   end
 
   def search_goal(name)

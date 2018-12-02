@@ -7,7 +7,7 @@ class TransactionController
   end
 
   def list_transactions
-    n_transactions =  @view.form_list
+    n_transactions = @view.form_list
     puts "\nUltimas #{n_transactions} transacciones:"
     transactions = @user.list_transactions(n_transactions.to_i)
     @view.print_transactions(transactions)

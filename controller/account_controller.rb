@@ -21,7 +21,12 @@ class AccountController
   end
 
   def transfer
-    data = @form.form_transfer
+    data = nil
+    loop do
+      data = @form.form_transfer
+      break if data[:email] != @user.email
+      puts 'No te puedes enviar dinero a ti mismo'
+    end
     if @user.account.transfer_money(data[:email], data[:amount])
       puts "\nEnvio realizado con exito!"
     else

@@ -2,8 +2,13 @@ class MattressController
   def initialize(user:)
     @user_input = UserInput.new
     @user = user
+    @form = AccountForm.new
   end
 
+  def available
+    puts "\nDinero ahorrado en el colchon: $#{@user.mattress.save_money}"
+  end
+  
   def deposit
     amount = @form.form_deposit
     if @user.mattress.deposit(amount, @user.account.available)

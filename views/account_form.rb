@@ -1,29 +1,34 @@
 class AccountForm
-  def initialize; end
+  def initialize
+    @user_input = UserInput.new
+  end
 
   def form_deposit
-    begin
+    loop do
       print 'ingrese la cantidad de dinero que desea depositar: '
-    end while !@user_input.validate_amount_input
+      break if @user_input.validate_amount_input
+    end
     @user_input.last_input.to_i
   end
 
   def form_withdraw
-    begin
+    loop do
       print 'ingrese la cantidad de dinero que desea retirar: '
-    end while !@user_input.validate_amount_input
+      break if @user_input.validate_amount_input
+    end
     @user_input.last_input.to_i
   end
 
   def form_transfer
-    begin
+    loop do
       print 'Direccion de correo a la cual desea enviar el dinero: '
-      puts 'No te puedes enviar dinero a ti mismo' if @user_input.last_input == @user.email
-    end while !@user_input.validate_user_data_input(field: 'email') || @user_input.last_input != @user.email
+      break if @user_input.validate_user_data_input(field: 'email')
+    end
     email = @user_input.last_input
-    begin
+    loop do
       print 'ingrese la cantidad de dinero que desea enviar: '
-    end while !@user_input.validate_amount_input
+      break if @user_input.validate_amount_input
+    end
     amount = @user_input.last_input.to_i
     { email: email, amount: amount }
   end

@@ -5,14 +5,19 @@ class GoalController
     @form = GoalForm.new
   end
 
+  def list
+    puts @user.list_goals
+  end
+
   def deposit
+    data = nil
     loop do
       data = @form.form_deposit
       break unless @user.search_goal(data[:name]).nil?
       puts "\nLa meta #{data[:name]} no existe"
     end
     if @user.search_goal(data[:name]).deposit(data[:amount], @user.account.available)
-      @user.account.available -= amount
+      @user.account.available -= data[:amount]
       puts "\nDinero agregado a la meta #{data[:name]} con exito!"
     else
       puts "\nLa cantidad a depositar no esta disponible en su cuenta"
@@ -22,10 +27,11 @@ class GoalController
   def create
     data = @form.form_create
     @user.add_goal(data[:name], data[:expected_amount], data[:year], data[:month], data[:day])
-    puts "\nLa meta #{name} ha sido creado con exito!"
+    puts "\nLa meta #{data[:name]} ha sido creado con exito!"
   end
 
   def delete
+    name = nil
     loop do
       name = @form.form_delete
       break unless @user.search_goal(name).nil?

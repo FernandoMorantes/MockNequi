@@ -5,28 +5,34 @@ class PocketController
     @form = PocketForm.new
   end
 
+  def list
+    puts @user.list_pockets
+  end
+
   def deposit
+    data = nil
     loop do
       data = @form.form_deposit
       break unless @user.search_pocket(data[:name]).nil?
       puts "\nEl bolsillo #{data[:name]} no existe"
     end
     if @user.search_pocket(data[:name]).deposit(data[:amount], @user.account.available)
-      @user.account.available -= amount
-      puts "\nDinero depositado en el bolisllo #{name} con exito!"
+      @user.account.available -= data[:amount]
+      puts "\nDinero depositado en el bolisllo #{data[:name]} con exito!"
     else
       puts "\nLa cantidad a depositar no esta disponible en su cuenta"
     end
   end
 
   def withdraw
+    data = nil
     loop do
       data = @form.form_deposit
       break unless @user.search_pocket(data[:name]).nil?
       puts "\nEl bolsillo #{data[:name]} no existe"
     end
     if @user.search_pocket(data[:name]).withdraw(data[:amount])
-      @user.account.available += amount
+      @user.account.available += data[:amount]
       puts "\nDinero retirado del bolsillo #{data[:name]} con exito!"
     else
       puts "\nLa cantidad a retirar no esta disponible en el bolsillo #{name}"
@@ -34,6 +40,7 @@ class PocketController
   end
 
   def transfer
+    data = nil
     loop do
       data = @form.form_transfer
       if data[:email] == @user.email

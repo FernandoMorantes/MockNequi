@@ -6,12 +6,12 @@ class TransactionView
   def form_list
     loop do
       print 'ingrese la cantidad de transacciones que desea consultar: '
-      break unless @user_input.validate_amount_input
+      break if @user_input.validate_amount_input
     end
     @user_input.last_input
   end
 
-  def print_transactions
+  def print_transactions(trasactions)
     
   end
 end

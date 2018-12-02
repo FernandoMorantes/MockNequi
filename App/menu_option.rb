@@ -6,6 +6,7 @@ class MenuOption
     @mattress_controller = MattressController.new(user: @user)
     @pocket_controller = PocketController.new(user: @user)
     @goal_controller = GoalController.new(user: @user)
+    @transaction_controller = TransactionController.new(user: user)
   end
 
   def do(option_number:, menu_type:)
@@ -24,16 +25,16 @@ class MenuOption
     @account_controller.deposit if option_number == 3
     @account_controller.withdraw if option_number == 4
     @account_controller.transfer if option_number == 5
-    @transaction.list_transactions if option_number == 6
+    @transaction_controller.list_transactions if option_number == 6
     @user_menu.mattress_menu if option_number == 7
     @user_menu.pocket_menu if option_number == 8
-    @user_menu.pocket_menu if option_number == 9
+    @user_menu.goal_menu if option_number == 9
     return false if option_number == 10
     true
   end
 
   def mattress_menu_option(option_number)
-    puts "\nDinero ahorrado en el colchon: #{@user.mattress.save_money}" if option_number == 1
+    @mattress_controller.available if option_number == 1
     @mattress_controller.deposit if option_number == 2
     @mattress_controller.withdraw if option_number == 3
     return false if option_number == 4
@@ -41,7 +42,7 @@ class MenuOption
   end
 
   def pocket_menu_option(option_number)
-    puts @user.list_pockets if option_number == 1
+    @pocket_controller.list if option_number == 1
     @pocket_controller.create if option_number == 2
     @pocket_controller.delete if option_number == 3
     @pocket_controller.deposit if option_number == 4
@@ -52,7 +53,7 @@ class MenuOption
   end
 
   def goal_menu_option(option_number)
-    puts @user.list_goals if option_number == 1
+    @goal_controller.list if option_number == 1
     @goal_controller.create if option_number == 2
     @goal_controller.delete if option_number == 3
     @goal_controller.deposit if option_number == 4
