@@ -15,6 +15,26 @@ class DBOperator
       database: ENV['db_name'],
       socket: ENV['socket']
     )
+  rescue StandardError => e
+    if e.error_number == 1049
+      @mysql_obj = Mysql2::Client.new(
+        username: ENV['user_name'],
+        password: ENV['password'],
+        host: ENV['host'],
+        port: ENV['port'],
+        socket: ENV['socket']
+      )
+      @mysql_obj.query("CREATE DATABASE IF NOT EXISTS `#{ENV['db_name']}` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci")
+      @mysql_obj = Mysql2::Client.new(
+        username: ENV['user_name'],
+        password: ENV['password'],
+        host: ENV['host'],
+        port: ENV['port'],
+        database: ENV['db_name'],
+        socket: ENV['socket']
+      )
+      require_relative 'create_database'
+    end
   end
 
   def query(query)

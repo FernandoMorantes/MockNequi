@@ -38,7 +38,7 @@ class Session < ConsolePrint
   end
 
   def login_process
-    print_cyan_bold "Login \n"
+    print_cyan_bold "Iniciar Sesion \n"
     loop do
       print_green "\nemail: "
       break if @user_input.validate_user_data_input(field: 'email')
