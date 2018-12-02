@@ -1,5 +1,5 @@
 # class that validates all the options entered by the user
-class UserInput < ConsolePrintColor
+class UserInput < ConsolePrint
   @last_input
 
   attr_reader :last_input, :menu_input

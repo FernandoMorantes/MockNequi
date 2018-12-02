@@ -1,5 +1,5 @@
 # runner class
-class MockNequi
+class MockNequi < ConsolePrint
   def initialize
     @mysql_obj = DBOperator.new
     @session = Session.new(@mysql_obj)
@@ -8,7 +8,7 @@ class MockNequi
   end
 
   def run
-    puts "\nBienvenido a Mock Nequi \n"
+    print_cyan_bold "\nBienvenido a Mock Nequi \n"
     loop do
       begin
         @menus_ui.show_main_menu
