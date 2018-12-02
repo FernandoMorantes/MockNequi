@@ -64,9 +64,9 @@ class Goal
     update_status
     "
     nombre: #{@name}
-    monto total: $#{@expected_amount}
-    dinero ahorrado: $#{@current_amount}
-    dinero restante: $#{remaining_money}
+    monto total: #{format_money(@expected_amount)}
+    dinero ahorrado: #{format_money(@current_amount)}
+    dinero restante: #{format_money(remaining_money)}
     estado: #{@status == 'in progress' && @active ? 'en progreso' : @status == 'fulfilled' ? 'completada' : @active ? 'expirada' : 'cerrada'}
     facha limite: #{@expiration_date.strftime('%a %d %b %Y')} \n\n"
   end
@@ -100,5 +100,19 @@ class Goal
 
   def remaining_money
     @expected_amount - @current_amount
+  end
+
+  def format_money(money)
+    money_format = ''
+    count = 0
+    money.to_s.split('').reverse.each do |number|
+      if count == 3
+        money_format += '.'
+        count = 0
+      end
+      money_format += number.to_s
+      count += 1
+    end
+    "$ #{money_format.reverse}"
   end
 end
