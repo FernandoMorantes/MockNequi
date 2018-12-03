@@ -9,7 +9,7 @@ Prototipo basado en el servicio creado por Bancolombia para transferir dinero en
 #### Descarga
 
 ```bash
-$ git clone https://github.com/FernandoMorantes/MockNequi.git ~/Documentos
+$ git clone https://github.com/FernandoMorantes/MockNequi.git
 ```
 
 #### Dependencia de gemas
