@@ -9,7 +9,7 @@ Prototipo basado en el servicio creado por Bancolombia para transferir dinero en
 #### Descarga
 
 ```bash
-$ git clone https://github.com/btd1337/eOS-Sierra-Gt ~/Documentos
+$ git clone https://github.com/FernandoMorantes/MockNequi.git ~/Documentos
 ```
 
 #### Dependencia de gemas
@@ -47,3 +47,5 @@ Entrar en la carpeta raiz de la aplicacion y ejecutar el siguiente comando:
 ```bash
 $ ruby main.rb
 ```
+
+[Documentacion](doc/Documentation.md)
