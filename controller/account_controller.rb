@@ -1,3 +1,4 @@
+# user account controller
 class AccountController < ConsolePrint
   def initialize(user:)
     @user = user

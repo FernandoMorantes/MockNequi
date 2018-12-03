@@ -1,3 +1,4 @@
+# class that controls the different menus
 class UserMenu < ConsolePrint
   def initialize(user:)
     @user = user

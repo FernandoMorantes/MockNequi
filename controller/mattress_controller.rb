@@ -1,3 +1,4 @@
+# user mattress controller
 class MattressController < ConsolePrint
   def initialize(user:)
     @user = user

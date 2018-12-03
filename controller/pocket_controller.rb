@@ -1,3 +1,4 @@
+# user pockets controller
 class PocketController < ConsolePrint
   def initialize(user:)
     @user = user

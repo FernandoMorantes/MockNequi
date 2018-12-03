@@ -1,3 +1,4 @@
+# user transactions controller
 class TransactionController < ConsolePrint
   def initialize(user:)
     @user = user

@@ -1,3 +1,4 @@
+# user goals controller
 class GoalController < ConsolePrint
   def initialize(user:)
     @user = user
