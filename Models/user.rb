@@ -50,6 +50,7 @@ class User
       count += 1
       break if count >= n_transactions
     end
+    list
   end
 
   def add_pocket(name)
@@ -92,9 +93,7 @@ class User
     end
     list += "\nLista de metas cumplidas:"
     goals.each do |goal|
-      if goal.status == 'fulfilled'
-        list += goal.to_string
-      end
+      list += goal.to_string if goal.status == 'fulfilled'
     end
     list
   end
@@ -119,7 +118,7 @@ class User
   end
 
   def define_pockets
-    @pockets =[]
+    @pockets = []
     pockets = @mysql_obj.query("SELECT * FROM `pockets` WHERE `user_id` = #{@id} AND `active` = '1'")
     pockets.each do |pocket|
       @pockets.push(Pocket.new(@mysql_obj, pocket['id']))
@@ -127,7 +126,7 @@ class User
   end
 
   def define_goals
-    @goals =[]
+    @goals = []
     goals = @mysql_obj.query("SELECT * FROM `goals` WHERE `user_id` = #{@id} AND `active` = '1'")
     goals.each do |goal|
       @goals.push(Goal.new(@mysql_obj, goal['id']))

@@ -1,5 +1,4 @@
-# user model class
-
+# user model classs
 class Account
   @id
   @available

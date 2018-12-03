@@ -1,3 +1,4 @@
+# class that does routing according to the user's option
 class MenuOption
   def initialize(user:, user_menu:)
     @user = user
@@ -9,6 +10,7 @@ class MenuOption
     @transaction_controller = TransactionController.new(user: user)
   end
 
+  # routed according to the type of menu
   def do(option_number:, menu_type:)
     return user_menu_option(option_number.to_i) if menu_type == 'user'
     return mattress_menu_option(option_number.to_i) if menu_type == 'mattress'
@@ -18,6 +20,8 @@ class MenuOption
   end
 
   private
+
+  # these methods route according to the option chosen by the user
 
   def user_menu_option(option_number)
     @account_controller.available if option_number == 1

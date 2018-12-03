@@ -1,3 +1,4 @@
+# user account controller
 class AccountForm < ConsolePrint
   def initialize
     @user_input = UserInput.new

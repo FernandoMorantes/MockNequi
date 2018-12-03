@@ -21,7 +21,7 @@ class MockNequi < ConsolePrint
       when 2
         clear_console
         if @session.login_process
-          user_menu = UserMenu.new(user: @session.current_logged_user, session: @session)
+          user_menu = UserMenu.new(user: @session.current_logged_user)
           user_menu.show
         end
       when 3

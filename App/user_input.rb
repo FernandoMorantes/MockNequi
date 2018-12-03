@@ -2,7 +2,7 @@
 class UserInput < ConsolePrint
   @last_input
 
-  attr_reader :last_input, :menu_input
+  attr_reader :last_input
 
   # validates the option entered in the corresponding menu
   # @param menu_type: menu where the user is located

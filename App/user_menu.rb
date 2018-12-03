@@ -1,7 +1,7 @@
+# class that controls the different menus
 class UserMenu < ConsolePrint
-  def initialize(user:, session:)
+  def initialize(user:)
     @user = user
-    @session = session
     @user_input = UserInput.new
     @menus_ui = MenusUI.new
     @menu_option = MenuOption.new(user: @user, user_menu: self)

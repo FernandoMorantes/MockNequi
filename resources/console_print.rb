@@ -1,3 +1,4 @@
+# class responsible for giving the console colored prints and cleaned of the same
 class ConsolePrint
   def clear_console
     system('cls') || system('clear')
@@ -36,6 +37,8 @@ class ConsolePrint
     print_blue "\n\n \t\t\t\t\t Presiona enter para continuar... \n"
     STDIN.noecho(&:gets).chomp
   end
+
+  # color printing
 
   def print_black(string)
     print "\e[0;30m#{string}\e[m"
