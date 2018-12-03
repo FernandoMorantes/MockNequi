@@ -2,7 +2,7 @@ class MattressController < ConsolePrint
   def initialize(user:)
     @user_input = UserInput.new
     @user = user
-    @form = AccountForm.new
+    @form = MattressForm.new
   end
 
   def available

@@ -4,7 +4,6 @@ class Session < ConsolePrint
   attr_accessor :current_logged_user
 
   def initialize(mysql_obj)
-    @session_active = false
     @mysql_obj = mysql_obj
     @user_input = UserInput.new
   end
@@ -31,8 +30,7 @@ class Session < ConsolePrint
       break if @user_input.validate_user_data_input(field: 'password')
     end
     password = @user_input.last_input
-    register_user(name, last_name, email, password)
-    print_green_bold "\nEl registro ha sido exitoso!"
+    print_green_bold "\nEl registro ha sido exitoso!" if register_user(name, last_name, email, password)
     wait_for_enter
     clear_console
   end
@@ -62,14 +60,22 @@ class Session < ConsolePrint
 
   def register_user(first_name, last_name, email, password)
     password = Digest::SHA2.hexdigest(password)
-    @mysql_obj.query("INSERT INTO `users` (`first_name`, `last_name`, `email`, `password`)
-                      VALUES ('#{first_name}', '#{last_name}', '#{email}', '#{password}')")
-    id = return_element(@mysql_obj.query("SELECT `id` FROM `users` 
-                                          WHERE `email` = '#{email}'"), 'id')
-    @mysql_obj.query("INSERT INTO `accounts` (`available`, `user_id`)
-                      VALUES ('0', '#{id}')")
-    @mysql_obj.query("INSERT INTO `mattresses` (`user_id`, `save_money`)
-                      VALUES ('#{id}', '0')")
+    begin
+      @mysql_obj.query("INSERT INTO `users` (`first_name`, `last_name`, `email`, `password`)
+                        VALUES ('#{first_name}', '#{last_name}', '#{email}', '#{password}')")
+      id = return_element(@mysql_obj.query("SELECT `id` FROM `users`
+                                            WHERE `email` = '#{email}'"), 'id')
+      @mysql_obj.query("INSERT INTO `accounts` (`available`, `user_id`)
+                        VALUES ('0', '#{id}')")
+      @mysql_obj.query("INSERT INTO `mattresses` (`user_id`, `save_money`)
+                        VALUES ('#{id}', '0')")
+    rescue StandardError => e
+      if e.error_number == 1062
+        print_red_bold "\n\nya existe un usuario con este correo"
+        return false
+      end
+    end
+    true
   end
 
   def login(email, password)
