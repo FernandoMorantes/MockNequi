@@ -1,4 +1,4 @@
-if Gem::Platform.local.os == 'windows'
+if ['mingw32', 'mingw64'].include?(Gem::Platform.local.os)
   require_relative '../config/config_database_windows'
 elsif Gem::Platform.local.os == 'linux'
   require_relative '../config/config_database_linux'

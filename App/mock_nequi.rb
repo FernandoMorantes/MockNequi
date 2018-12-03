@@ -5,10 +5,11 @@ class MockNequi < ConsolePrint
     @session = Session.new(@mysql_obj)
     @menus_ui = MenusUI.new
     @user_input = UserInput.new
+    @console_print = ConsolePrint.new
   end
 
   def run
-    print_cyan_bold "\nBienvenido a Mock Nequi \n"
+    @console_print.title title:"\nBienvenido a Mock Nequi \n"
     loop do
       loop do
         @menus_ui.show_main_menu
@@ -25,7 +26,7 @@ class MockNequi < ConsolePrint
           user_menu.show
         end
       when 3
-        mock_loading 'saliendo'
+        @console_print.mock_loading message:'saliendo'
         @mysql_obj.close_connection
         exit
       end
