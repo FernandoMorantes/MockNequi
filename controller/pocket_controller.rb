@@ -1,6 +1,5 @@
 class PocketController < ConsolePrint
   def initialize(user:)
-    @user_input = UserInput.new
     @user = user
     @form = PocketForm.new
   end

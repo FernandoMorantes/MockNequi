@@ -1,6 +1,5 @@
 class AccountController < ConsolePrint
   def initialize(user:)
-    @user_input = UserInput.new
     @user = user
     @form = AccountForm.new
   end
