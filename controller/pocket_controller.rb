@@ -15,7 +15,7 @@ class PocketController < ConsolePrint
     loop do
       data = @form.form_deposit
       break unless @user.search_pocket(data[:name]).nil?
-      print_red_bold "\nEl bolsillo #{data[:name]} no existe"
+      print_red_bold "\nEl bolsillo #{data[:name]} no existe\n"
     end
     if @user.search_pocket(data[:name]).deposit(data[:amount], @user.account.available)
       @user.account.available -= data[:amount]
@@ -32,7 +32,7 @@ class PocketController < ConsolePrint
     loop do
       data = @form.form_deposit
       break unless @user.search_pocket(data[:name]).nil?
-      print_red_bold "\nEl bolsillo #{data[:name]} no existe"
+      print_red_bold "\nEl bolsillo #{data[:name]} no existe\n"
     end
     if @user.search_pocket(data[:name]).withdraw(data[:amount])
       @user.account.available += data[:amount]
@@ -52,7 +52,7 @@ class PocketController < ConsolePrint
         print_brown 'No te puedes enviar dinero a ti mismo'
       else
         break unless @user.search_pocket(data[:name]).nil?
-        print_red_bold "\nEl bolsillo #{data[:name]} no existe"
+        print_red_bold "\nEl bolsillo #{data[:name]} no existe\n"
       end
     end
     if @user.search_pocket(data[:name]).transfer_money(data[:email], data[:amount])
@@ -79,7 +79,7 @@ class PocketController < ConsolePrint
       @user.account.available += pocket_balance
       print_green_bold "\nEl bolsillo #{name} ha sido eliminado, el saldo ahora esta disponible en la cuenta"
     else
-      print_red_bold "\nEl bolsillo #{name} no existe"
+      print_red_bold "\nEl bolsillo #{name} no existe\n"
     end
     wait_for_enter
     clear_console
