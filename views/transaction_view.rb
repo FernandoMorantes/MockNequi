@@ -1,11 +1,12 @@
 class TransactionView < ConsolePrint
   def initialize
     @user_input = UserInput.new
+    @console_print = ConsolePrint.new
   end
 
   def form_list
     loop do
-      print_blue 'ingrese la cantidad de transacciones que desea consultar: '
+      @console_print.blue_message message:'ingrese la cantidad de transacciones que desea consultar: '
       break if @user_input.validate_amount_input
     end
     @user_input.last_input
@@ -13,14 +14,14 @@ class TransactionView < ConsolePrint
 
   def print_transactions(transactions)
     puts
-    print_purple_bold 'Tipo de trasaccion'.center(30)
-    print_purple_bold 'Monto'.center(30)
-    print_purple_bold 'Fecha'.center(30)
+    @console_print.transaction_title title:'Tipo de trasaccion'.center(30)
+    @console_print.transaction_title title:'Monto'.center(30)
+    @console_print.transaction_title title:'Fecha'.center(30)
     puts
     transactions.each do |trasaction|
-      print_brown type_trasaction_translate(trasaction['type'].to_s).center(30)
+      @console_print.transaction_info info:type_trasaction_translate(trasaction['type'].to_s).center(30)
       color_amount(trasaction['amount'], trasaction['type'])
-      print_brown trasaction['transaction_date'].strftime('%a %d %b %Y %I:%M:%S %P').center(30)
+      @console_print.transaction_info info:trasaction['transaction_date'].strftime('%a %d %b %Y %I:%M:%S %P').center(30)
       puts
     end
   end
@@ -28,8 +29,8 @@ class TransactionView < ConsolePrint
   private
 
   def color_amount(amount, type_trasaction)
-    print_red "- $ #{format_money(amount.to_s)}".to_s.center(30) if %w[withdraw sending].include? type_trasaction
-    print_green "+ $ #{format_money(amount.to_s)}".to_s.center(30) if %w[deposit reception].include? type_trasaction
+    @console_print.transaction_withdraw amount:"- $ #{format_money(amount.to_s)}".to_s.center(30) if %w[withdraw sending].include? type_trasaction
+    @console_print.transaction_deposit amount:"+ $ #{format_money(amount.to_s)}".to_s.center(30) if %w[deposit reception].include? type_trasaction
   end
 
   def type_trasaction_translate(type_transaction)

@@ -1,43 +1,43 @@
-# user account controller
-class AccountController < ConsolePrint
+class AccountController
   def initialize(user:)
     @user = user
     @form = AccountForm.new
+    @console_print = ConsolePrint.new      
   end
 
   def available
     @user.account.update_available_money
-    print_blue "\nDinero disponible en la cuenta: "
-    print_money @user.account.available.to_s
-    wait_for_enter
-    clear_console
+    @console_print.blue_message message:"\nDinero disponible en la cuenta: "
+    @console_print.money_amount amount:@user.account.available.to_s
+    @console_print.wait_for_enter
+    @console_print.clear_console
   end
 
   def balance_total
     @user.account.update_available_money
-    print_blue "\nDinero Total en la cuenta: "
-    print_money @user.total_balance.to_s
-    wait_for_enter
-    clear_console
+    @console_print.blue_message message:"\nDinero Total en la cuenta: "
+    @console_print.money_amount amount:@user.total_balance.to_s
+    @console_print.wait_for_enter
+    @console_print.clear_console
   end
 
   def deposit
     amount = @form.form_deposit
     @user.account.deposit(amount)
-    print_green_bold "\nDinero depositado con exito!"
-    wait_for_enter
-    clear_console
+    @console_print.success_message message:"\nDinero depositado con exito!"
+    @console_print.wait_for_enter
+    @console_print.clear_console
   end
 
   def withdraw
     amount = @form.form_withdraw
     if @user.account.withdraw(amount)
-      print_green_bold "\nRetiro realizado con exito!"
+      @console_print.success_message message:"\nRetiro realizado con exito!"
     else
-      print_red_bold "\nLa cantidad a retirar no esta disponible en su cuenta"
+      @console_print.error error:"\nLa cantidad a retirar no esta disponible en su cuenta"
     end
-    wait_for_enter
-    clear_console
+    @console_print.wait_for_enter
+    @console_print.clear_console
   end
 
   def transfer
@@ -45,14 +45,14 @@ class AccountController < ConsolePrint
     loop do
       data = @form.form_transfer
       break if data[:email] != @user.email
-      puts 'No te puedes enviar dinero a ti mismo'
+      @console_print.message message:'No te puedes enviar dinero a ti mismo'
     end
     if @user.account.transfer_money(data[:email], data[:amount])
-      print_green_bold "\nEnvio realizado con exito!"
+      @console_print.success_message message:"\nEnvio realizado con exito!"
     else
-      print_red_bold "\nLa cantidad a enviar no esta disponible en su cuenta\no el correo especificado no tiene una cuenta registrada"
+      @console_print.error error:"\nLa cantidad a enviar no esta disponible en su cuenta\no el correo especificado no tiene una cuenta registrada"
     end
-    wait_for_enter
-    clear_console
+    @console_print.wait_for_enter
+    @console_print.clear_console
   end
 end

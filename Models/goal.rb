@@ -113,6 +113,6 @@ class Goal
       money_format += number.to_s
       count += 1
     end
-    "$ #{money_format.reverse}"
+    "\e[1;32m$#{money_format.reverse}\e[m"
   end
 end
