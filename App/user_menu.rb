@@ -1,10 +1,11 @@
-class UserMenu < ConsolePrint
+class UserMenu
   def initialize(user:, session:)
     @user = user
     @session = session
     @user_input = UserInput.new
     @menus_ui = MenusUI.new
     @menu_option = MenuOption.new(user: @user, user_menu: self)
+    @console_print = ConsolePrint.new
   end
 
   def show
@@ -15,12 +16,12 @@ class UserMenu < ConsolePrint
       end
       break unless @menu_option.do(menu_type: 'user', option_number: @user_input.last_input)
     end
-    mock_loading('Cerrando sesion')
-    clear_console
+    @console_print.mock_loading message:'Cerrando sesion'
+    @console_print.clear_console
   end
 
   def mattress_menu
-    clear_console
+    @console_print.clear_console
     loop do
       loop do
         @menus_ui.show_mattress_menu
@@ -28,11 +29,11 @@ class UserMenu < ConsolePrint
       end
       break unless @menu_option.do(menu_type: 'mattress', option_number: @user_input.last_input)
     end
-    clear_console
+    @console_print.clear_console
   end
 
   def pocket_menu
-    clear_console
+    @console_print.clear_console
     loop do
       loop do
         @menus_ui.show_pocket_menu
@@ -40,11 +41,11 @@ class UserMenu < ConsolePrint
       end
       break unless @menu_option.do(menu_type: 'pocket', option_number: @user_input.last_input)
     end
-    clear_console
+    @console_print.clear_console
   end
 
   def goal_menu
-    clear_console
+    @console_print.clear_console
     loop do
       loop do
         @menus_ui.show_goal_menu
@@ -52,6 +53,6 @@ class UserMenu < ConsolePrint
       end
       break unless @menu_option.do(menu_type: 'goal', option_number: @user_input.last_input)
     end
-    clear_console
+    @console_print.clear_console
   end
 end

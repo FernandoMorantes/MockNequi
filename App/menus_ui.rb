@@ -1,5 +1,5 @@
 # class that contains the definition of all the menus of the application
-class MenusUI < ConsolePrint
+class MenusUI < PrintStyle
   def initialize; end
 
   def show_main_menu

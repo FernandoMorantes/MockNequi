@@ -1,5 +1,5 @@
 # class that controls the sessions of the application
-class Session < ConsolePrint
+class Session
   @current_logged_user
   attr_accessor :current_logged_user
 
@@ -7,53 +7,55 @@ class Session < ConsolePrint
     @session_active = false
     @mysql_obj = mysql_obj
     @user_input = UserInput.new
+    @console_print = ConsolePrint.new
   end
 
   def registration_process
-    print_cyan_bold "Resgistro \n"
+    @console_print.title title:"Resgistro \n"
     loop do
-      print_green "\nnombre: "
+      @console_print.credentials_field field:"\nnombre: "
       break if @user_input.validate_user_data_input(field: 'name')
     end
     name = @user_input.last_input
     loop do
-      print_green "\napellido: "
+      @console_print.credentials_field field:"\napellido: "
       break if @user_input.validate_user_data_input(field: 'last name')
     end
     last_name = @user_input.last_input
     loop do
-      print_green "\nemail: "
+      @console_print.credentials_field field:"\nemail: "
       break if @user_input.validate_user_data_input(field: 'email')
     end
     email = @user_input.last_input
     loop do
-      print_green "\ncontraseña: "
+      @console_print.credentials_field field:"\ncontraseña: "
       break if @user_input.validate_user_data_input(field: 'password')
     end
     password = @user_input.last_input
     register_user(name, last_name, email, password)
-    print_green_bold "\nEl registro ha sido exitoso!"
-    wait_for_enter
-    clear_console
+    @console_print.success_message message:"\nEl registro ha sido exitoso!"
+    @console_print.wait_for_enter
+    @console_print.clear_console
   end
 
   def login_process
-    print_cyan_bold "Iniciar Sesion \n"
+    @console_print.title title:"Iniciar Sesion \n"
     loop do
-      print_green "\nemail: "
+      @console_print.credentials_field field:"\nemail: "
       break if @user_input.validate_user_data_input(field: 'email')
     end
     email = @user_input.last_input
     loop do
-      print_green "\ncontraseña: "
+      @console_print.credentials_field field:"\ncontraseña: "
       break if @user_input.validate_user_data_input(field: 'password')
     end
     password = @user_input.last_input
     if login(email, password)
-      print_purple "\n\n\nBienvenido #{@current_logged_user.first_name} \n"
+       @console_print.clear_console
+       @console_print.welcome_message message:"\nBienvenido #{@current_logged_user.first_name} \n"
       return true
     else
-      print_red_bold "\nError: Email o contraseña incorrectos. Intentalo nuevamente"
+      @console_print.error error:"\nError: Email o contraseña incorrectos. Intentalo nuevamente"
       return false
     end
   end

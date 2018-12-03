@@ -45,18 +45,22 @@ class User
                                     WHERE users.id = '#{@id}'
                                     ORDER BY tx.transaction_date DESC)
                                     ORDER BY `transaction_date` DESC")
-    transactions.each do |row|
+    transactions.each_with_index do |row, index|
       list.push(row)
-      count += 1
-      break if count >= n_transactions
+      break if index >= (n_transactions-1)
     end
+    list
   end
 
   def add_pocket(name)
-    @mysql_obj.query("INSERT INTO `pockets` (`name`, `balance`, `active`, `user_id`) VALUES ('#{name}', '0', '1', '#{@id}')")
-    @pockets = []
-    define_pockets
-    true
+    if search_pocket(name).nil?
+      @mysql_obj.query("INSERT INTO `pockets` (`name`, `balance`, `active`, `user_id`) VALUES ('#{name}', '0', '1', '#{@id}')")
+      @pockets = []
+      define_pockets
+      true
+    else
+      false
+    end
   end
 
   def search_pocket(name)
@@ -67,12 +71,16 @@ class User
   end
 
   def add_goal(name, expected_amount, year, month, day)
-    expiration_date = DateTime.new(year, month, day).strftime('%Y-%m-%d %H:%M:%S')
-    return false unless search_goal(name).nil?
-    @mysql_obj.query("INSERT INTO `goals` (`name`, `current_amount`, `expected_amount`, `active`, `status`, `user_id`, `expiration_date`) VALUES ('#{name}', '0', '#{expected_amount}', '1', 'in progress', '#{@id}', '#{expiration_date}')")
-    @goals = []
-    define_goals
-    true
+    if search_goal(name).nil? && DateTime.new(year, month, day) > DateTime.now
+      expiration_date = DateTime.new(year, month, day).strftime('%Y-%m-%d %H:%M:%S')
+      return false unless search_goal(name).nil?
+      @mysql_obj.query("INSERT INTO `goals` (`name`, `current_amount`, `expected_amount`, `active`, `status`, `user_id`, `expiration_date`) VALUES ('#{name}', '0', '#{expected_amount}', '1', 'in progress', '#{@id}', '#{expiration_date}')")
+      @goals = []
+      define_goals
+      true
+    else
+      false
+    end
   end
 
   def list_pockets
@@ -86,11 +94,11 @@ class User
 
   def list_goals
     define_goals
-    list = "\nLista de metas activas:"
+    list = "\nLista de metas activas:\n"
     goals.each do |goal|
       list += goal.to_string if goal.active == true && goal.status != 'fulfilled'
     end
-    list += "\nLista de metas cumplidas:"
+    list += "\nLista de metas cumplidas:\n"
     goals.each do |goal|
       if goal.status == 'fulfilled'
         list += goal.to_string
