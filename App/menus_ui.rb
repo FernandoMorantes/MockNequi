@@ -1,53 +1,58 @@
 # class that contains the definition of all the menus of the application
-class MenusUI
+class MenusUI < PrintStyle
   def initialize; end
 
   def show_main_menu
-    print "\nMenu principal \n
-    1. registrarse
-    2. ingresar
-    3. cerrar el programa \n\nIngrese la opcion que desea seleccionar: "
+    print_blue_bold "\nMenu principal \n\n"
+    print_purple_bold '1. '; print_blue_bold "Registrarse\n"
+    print_purple_bold '2. '; print_blue_bold "Ingresar\n"
+    print_purple_bold '3. '; print_blue_bold "Cerrar el programa \n\n"
+    print_brown_bold 'Ingrese la opcion que desea seleccionar: '
   end
 
   def show_user_menu
-    print "\nMenu de usuario \n
-    1. consultar saldo disponible en la cuenta
-    2. consultar saldo total de la cuenta
-    3. ingresar dinero a la cuenta
-    4. retirar
-    5. enviar dinero
-    6. consultar transacciones
-    7. consultar colchon
-    8. consultar bolsillos
-    9. consultar metas
-    10. cerrar sesión \n\nIngrese la opcion que desea seleccionar: "
+    print_cyan_bold "\nMenu de usuario \n\n"
+    print_purple_bold '1. '; print_blue_bold "Consultar saldo disponible en la cuenta\n"
+    print_purple_bold '2. '; print_blue_bold "Consultar saldo total de la cuenta\n"
+    print_purple_bold '3. '; print_blue_bold "Ingresar dinero a la cuenta\n"
+    print_purple_bold '4. '; print_blue_bold "Retirar dinero de la cuenta\n"
+    print_purple_bold '5. '; print_blue_bold "Enviar dinero a otro usuario\n"
+    print_purple_bold '6. '; print_blue_bold "Consultar transacciones\n"
+    print_purple_bold '7. '; print_blue_bold "Menu colchones \n"
+    print_purple_bold '8. '; print_blue_bold "Menu bolsillos\n"
+    print_purple_bold '9. '; print_blue_bold "Menu metas\n"
+    print_purple_bold '10. '; print_blue_bold "Cerrar sesión \n\n"
+    print_brown_bold 'Ingrese la opcion que desea seleccionar: '
   end
 
   def show_mattress_menu
-    print "\nMenu colchon \n
-    1. consultar dinero guardado
-    2. agregar dinero
-    3. retirar dinero
-    4. regresar al menu de usuario \n\nIngrese la opcion que desea seleccionar: "
+    print_cyan_bold "\nMenu colchon \n\n"
+    print_purple_bold '1. '; print_blue_bold "Consultar dinero guardado\n"
+    print_purple_bold '2. '; print_blue_bold "Agregar dinero\n"
+    print_purple_bold '3. '; print_blue_bold "Retirar dinero\n"
+    print_purple_bold '4. '; print_blue_bold "Regresar al menu de usuario\n\n"
+    print_brown_bold 'Ingrese la opcion que desea seleccionar: '
   end
 
   def show_pocket_menu
-    print "\nMenu de bolsillos \n
-    1. listar bolsillos
-    2. crear un nuevo bolsillo
-    3. eliminar un bolsillo
-    4. agregar dinero a un bolsillo
-    5. retirar dinero de un bolsillo
-    6. enviar dinero a otro usuario
-    7. regresar al menu de usuario \n\nIngrese la opcion que desea seleccionar:  "
+    print_cyan_bold "\nMenu de bolsillos \n\n"
+    print_purple_bold '1. '; print_blue_bold "Listar bolsillos\n"
+    print_purple_bold '2. '; print_blue_bold "Crear un nuevo bolsillo\n"
+    print_purple_bold '3. '; print_blue_bold "Eliminar un bolsillo\n"
+    print_purple_bold '4. '; print_blue_bold "Agregar dinero a un bolsillo\n"
+    print_purple_bold '5. '; print_blue_bold "Retirar dinero de un bolsillo\n"
+    print_purple_bold '6. '; print_blue_bold "Enviar dinero a otro usuario\n"
+    print_purple_bold '7. '; print_blue_bold "Regresar al menu de usuario\n\n"
+    print_brown_bold 'Ingrese la opcion que desea seleccionar: '
   end
 
   def show_goal_menu
-    print "\nMenu de metas \n
-    1. listar metas
-    2. crear una nueva meta
-    3. cerrar una meta
-    4. agregar dinero a una meta
-    5. regresar al menu de usuario \n\nIngrese la opcion que desea seleccionar: "
+    print_cyan_bold "\nMenu de metas \n\n"
+    print_purple_bold '1. '; print_blue_bold "Listar metas\n"
+    print_purple_bold '2. '; print_blue_bold "Crear una nueva meta\n"
+    print_purple_bold '3. '; print_blue_bold "Cerrar una meta\n"
+    print_purple_bold '4. '; print_blue_bold "agregar dinero a una meta\n"
+    print_purple_bold '5. '; print_blue_bold "Regresar al menu de usuario\n\n"
+    print_brown_bold 'Ingrese la opcion que desea seleccionar: '
   end
 end
